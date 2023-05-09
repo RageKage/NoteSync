@@ -52,7 +52,7 @@ const notesStore = useNotesStore();
 const noteTitle = ref("");
 const noteContent = ref("");
 const notes = notesStore.notes;
-const titleInput = ref(null)
+const titleInput = ref(null);
 
 // get the current user when the page rendered
 const getCurrentUser = notesStore.getCurrentUser;
@@ -63,6 +63,7 @@ onMounted(() => {
 // add a new note
 const addNote = () => {
   if (noteTitle.value == "") {
+    titleInput.value.focus();
     return Swal.fire({
       text: `You need to add a Title`,
       icon: "info",

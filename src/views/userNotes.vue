@@ -1,4 +1,5 @@
 <template>
+
   <div>
     <template v-if="notes && notes.length > 0">
       <div class="notes-app">
@@ -149,6 +150,18 @@ const updateNote = (noteToEditRef) => {
       }),
     };
 
+    if (!updatedNote.title) {
+      return Swal.fire({
+        text: `You can't set the title empty when updating it`,
+        icon: "info",
+      });
+    } else if (!updatedNote.content) {
+      return Swal.fire({
+        text: `You can't set the content empty when updating it`,
+        icon: "info",
+      });
+    }
+
     console.log("updatedNote:", updatedNote);
 
     const auth = getAuth();
@@ -244,7 +257,6 @@ const deleteNote = (id) => {
   }
 };
 
-
 const loadNotes = async (user) => {
   // this will load the notes of the current user
   const db = getDatabase(); // get the database
@@ -272,9 +284,12 @@ const loadNotes = async (user) => {
     console.error(error);
   }
 };
+
 </script>
 
 <style scoped>
+
+
 .modal {
   position: fixed;
   top: 50%;
@@ -479,7 +494,8 @@ date {
   color: #666;
 }
 .note-actions button.delete-btn:hover {
-  background-color: #e1e1e1;
+  background-color: #f27474;
+  color: #fff;
 }
 
 .empty-notes {

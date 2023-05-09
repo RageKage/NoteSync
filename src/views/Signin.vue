@@ -20,6 +20,11 @@
     <div class="form-submit-container">
       <button class="form-submit-button" @click="handleSignIn">Submit</button>
       <button class="form-google-button" @click="signInWithGoogle">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+          alt="Google Logo"
+          class="google-logo"
+        />
         Sign in with Google
       </button>
     </div>
@@ -143,33 +148,54 @@ input {
 }
 .form-submit-button {
   margin-top: 1rem;
-  padding: 0.5rem 1rem;
+  padding: 8px 24px;
   background-color: #4caf50;
-  color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  outline: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s, box-shadow 0.3s;
 }
+
 .form-submit-button:hover {
   background-color: #388e3c;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 /* Google sign-in */
 .form-google-button {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
-  background-color: #fff;
-  color: #757575;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #102d5e;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 8px 24px;
+  border-radius: 4px;
+  border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  outline: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  transition: background-color 0.3s, box-shadow 0.3s;
 }
 .form-google-button:hover {
-  border: 1px solid #757575;
-  color: #212121;
+  background-color: #2a75f3;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.google-logo {
+  height: 20px;
+  width: 20px;
+  margin-right: 8px;
 }
 </style>

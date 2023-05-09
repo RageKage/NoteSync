@@ -44,14 +44,16 @@ export const useNotesStore = defineStore("notes", () => {
       }),
     };
 
-    console.log(newNote);
-
     if (!newNote.title) {
-      alert("Add your note title");
-      return;
+      return Swal.fire({
+        text: `You need to add a Title`,
+        icon: "info",
+      });
     } else if (!newNote.content) {
-      alert("Add your note content");
-      return;
+      return Swal.fire({
+        text: `You need to add content`,
+        icon: "info",
+      });
     }
 
     const auth = getAuth();
@@ -63,7 +65,7 @@ export const useNotesStore = defineStore("notes", () => {
 
       // Determine the current user is a guest
       const isGuest = currentUser.email.endsWith("@notesync.com");
-      console.log('Is Guest:', isGuest);
+      console.log("Is Guest:", isGuest);
 
       // if a user then go save their note in the notes collection if guest then go ahead and save their note in the guests notes collection
       const collection = isGuest ? "guests" : "users";

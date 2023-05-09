@@ -168,6 +168,7 @@ body {
   display: inline-block;
   padding: 5px 5px;
   position: relative;
+  padding-left: 1rem;
 }
 
 a:after {
@@ -278,7 +279,7 @@ a:hover:after {
     width: 100%;
     text-align: left;
     padding: 8px 16px;
-    border-bottom: 1px solid #eee;
+    /* border-bottom: 1px solid #eee; */
 
     display: flex;
     justify-content: flex-end;
