@@ -45,48 +45,20 @@
         </p>
       </div>
       <div class="right">
-        <div class="signed-in" v-if="!signedIn">
-          <p>
-            Get started and start capturing your thoughts, ideas, and
-            inspirations!
-          </p>
-          <router-link to="/register" class="sign-up">
-            Sign up Now!
-          </router-link>
-        </div>
-        <div class="signed-in" v-if="signedIn">
-          <p>
-            Stay tuned! I will be adding more features like a reminder and
-            sharing with friends.
-          </p>
-          <router-link to="/new-note" class="sign-up">
-            Start Writing!
-          </router-link>
-        </div>
+        <p>
+          Get started and start capturing your thoughts, ideas, and
+          inspirations!
+        </p>
+        <router-link v-if="!signedIn" to="/register" class="sign-up">
+          Sign up Now!
+        </router-link>
+        <router-link v-if="signedIn" to="/new-note">
+          Start Writing!
+        </router-link>
       </div>
     </div>
   </div>
 </template>
-
-<script setup>
-import { onMounted, ref, computed } from "vue";
-import { getAuth, signOut as signOutFirebase } from "firebase/auth";
-import router from "../router/router";
-import { useRoute } from "vue-router";
-
-const auth = getAuth();
-const signedIn = ref(false);
-
-onMounted(() => {
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      signedIn.value = true; // Set signedIn to true if the user is signed in
-    } else {
-      signedIn.value = false; // Set signedIn to false if the user is signed out
-    }
-  });
-});
-</script>
 
 <style scoped>
 /* General CSS reset */
@@ -141,10 +113,9 @@ header p {
 }
 
 .content {
-  /* display: flex;
-  flex-wrap: wrap; */
+  display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
-  flex-direction: column;
 }
 
 .left,
@@ -154,11 +125,12 @@ header p {
 
 .left {
   padding: 2rem;
-  /* background-color: #f9f9f9; */
-  /* border: 1px solid #ccc; */
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
   border-radius: 8px;
   margin-bottom: 2rem;
   text-align: center;
+
   box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.1);
 }
 
@@ -191,12 +163,6 @@ header p {
 
 .right p {
   margin-bottom: 1rem;
-}
-
-.left,
-.right {
-  flex: none;
-  max-width: 100%;
 }
 
 router-link {
@@ -239,21 +205,15 @@ router-link:hover {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-.signed-in {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin-bottom: 3rem;
-  background-color: #fff;
-  color: #1c1b1b;
-  padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.1);
-}
+@media screen and (max-width: 568px) {
+  .content {
+    flex-direction: column;
+  }
 
-.signed-in p {
-  font-size: 1rem;
-  margin-bottom: 1rem;
+  .left,
+  .right {
+    flex: none;
+    max-width: 100%;
+  }
 }
 </style>
