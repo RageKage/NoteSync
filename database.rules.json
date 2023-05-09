@@ -1,0 +1,16 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "guests": {
+      "$guestId": {
+        ".read": "auth.uid !== null",
+        ".write": "auth.uid !== null"
+      }
+    }
+  }
+}
