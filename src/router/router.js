@@ -26,9 +26,13 @@ const router = createRouter({
         requireAuth: true, // Specify that this route requires authentication
       },
     },{
-      path: "/about",
-      name: 'About',
-      component: () => import("../views/aboutPage.vue")
+      path: "/profile",
+      name: 'profile',
+      component: () => import("../views/profilePage.vue")
+    },{
+      path: "/resetPassword",
+      name: 'resetPassword',
+      component: () => import("../views/passwordresetPage.vue")
     },
     {
       // This is a catch-all route for any paths that don't match the above routes

@@ -27,6 +27,9 @@
         />
         Sign in with Google
       </button>
+      <div class="forgot-password">
+        <router-link class="forgot-password-btn" to="/resetPassword"> Forgot Password</router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -46,6 +49,7 @@ const handleSignIn = async () => {
   const response = await authUserStore.registerOrSignIn(
     email.value,
     password.value,
+    null,
     true
   );
 
@@ -53,8 +57,9 @@ const handleSignIn = async () => {
     console.log("Successfully Sign-in!");
     router.push("/new-note");
   } else {
-    console.log(response.error);
-    alert(response.error.message);
+    // console.log(response.error);
+
+    // alert(response.error.message);
     switch (
       response.error.code // a switch to handle different type of error when signing in has failed
     ) {
@@ -80,8 +85,8 @@ const signInWithGoogle = async () => {
     console.log("Successfully registered!");
     router.push("/my-notes");
   } else {
-    console.log(response.error);
-    alert(response.error.message);
+    // console.log(response.error);
+    // alert(response.error.message);
   }
 };
 </script>
@@ -197,5 +202,31 @@ input {
   height: 20px;
   width: 20px;
   margin-right: 8px;
+}
+
+/* Password reset */
+.forgot-password {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.forgot-password-btn {
+  background-color: #1e88e5;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+}
+
+.forgot-password-btn:hover {
+  background-color: #1565c0;
 }
 </style>

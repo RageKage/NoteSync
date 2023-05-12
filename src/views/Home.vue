@@ -29,8 +29,7 @@
           <li>🌐 Responsive design for a great experience on any device</li>
         </ul>
         <p>
-          Note-taking web app, designed for seamless and secure organization of
-          your personal notes! Developed with Vue.js, Firebase, and Vite, the
+          Developed with Vue.js, Firebase, and Vite, the
           app also leverages GitHub Actions for continuous integration and
           deployment to Firebase Hosting, ensuring smooth updates. As this is
           the beta testing phase, I'd love to hear your feedback on the app's
@@ -103,26 +102,40 @@ body {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-}
 
-header {
-  display: flex;
+    display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+
+/*   
   margin-bottom: 3rem;
   background-color: #fff;
   color: #1c1b1b;
   padding: 2rem;
   border-radius: 1rem;
+  box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.1); */
+}
 
-  box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.1);
+header {
+  /* display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 3rem;
+  background-color: #fff;
+  color: #1c1b1b; */
+
+  padding: 2rem;
+  border-radius: 1rem;
+
+  /* box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.1); */
 }
 
 header img {
@@ -141,10 +154,9 @@ header p {
 }
 
 .content {
-  /* display: flex;
-  flex-wrap: wrap; */
   gap: 2rem;
   flex-direction: column;
+
 }
 
 .left,
@@ -154,12 +166,13 @@ header p {
 
 .left {
   padding: 2rem;
-  /* background-color: #f9f9f9; */
-  /* border: 1px solid #ccc; */
   border-radius: 8px;
   margin-bottom: 2rem;
   text-align: center;
   box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.1);
+
+
+  
 }
 
 .left h2 {
@@ -187,6 +200,8 @@ header p {
   align-items: center;
   justify-content: center;
   text-align: center;
+
+  
 }
 
 .right p {
@@ -240,7 +255,7 @@ router-link:hover {
 }
 
 .signed-in {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
@@ -249,7 +264,14 @@ router-link:hover {
   color: #1c1b1b;
   padding: 2rem;
   border-radius: 1rem;
-  box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.1); */
+
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
 }
 
 .signed-in p {

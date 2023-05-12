@@ -1,7 +1,16 @@
 <template>
   <div class="container">
     <form class="form">
-      <h1 class="form-title">Create an Account</h1>
+      <h1 class="form-title">Get Started</h1>
+      <div class="form-input-container">
+        <label for="user-name">Name</label>
+        <input
+          id="user-name"
+          type="text"
+          placeholder="Name"
+          v-model="userName"
+        />
+      </div>
       <div class="form-input-container">
         <label for="email">Email</label>
         <input id="email" type="email" placeholder="Email" v-model="email" />
@@ -16,6 +25,7 @@
         />
       </div>
     </form>
+
     <div class="form-submit-container">
       <button class="form-submit-button" @click="handleRegister">Submit</button>
       <button class="form-google-button" @click="signInWithGoogle">
@@ -51,6 +61,7 @@ import { useAuthUserStore } from "../stores/authUser.js";
 const authUserStore = useAuthUserStore();
 const email = ref("");
 const password = ref("");
+const userName = ref("");
 
 const showModal = ref(false);
 const guestCredentials = ref(null);
@@ -65,14 +76,15 @@ const handleRegister = async () => {
   console.log("Register");
   const response = await authUserStore.registerOrSignIn(
     email.value,
-    password.value
+    password.value,
+    userName.value
   );
   if (response.success) {
     console.log("Successfully registered!");
     router.push("/new-note"); // take them to the new note page when they login in
   } else {
-    console.log(response.error);
-    alert(response.error.message);
+    // console.log(response.error);
+    // alert(response.error.message);
   }
 };
 
@@ -82,16 +94,12 @@ const signInWithGoogle = async () => {
   if (response.success) {
     console.log("Successfully registered!");
     router.push("/new-note");
-  } else {
-    console.log(response.error);
-    alert(response.error.message);
   }
 };
 
 const signInAsGuest = async () => {
-
   guestCredentials.value = await authUserStore.signInAsGuest();
-  console.log(guestCredentials)
+  console.log(guestCredentials);
   showModal.value = true;
 };
 </script>

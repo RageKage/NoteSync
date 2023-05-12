@@ -24,6 +24,10 @@
           <span class="separator">|</span>
           <router-link to="/my-notes">My Notes</router-link>
         </li>
+        <li v-if="signedIn" @click="closeMenu">
+          <span class="separator">|</span>
+          <router-link to="/profile">Profile</router-link>
+        </li>
         <li v-if="!signedIn" @click="closeMenu">
           <span class="separator">|</span>
           <router-link to="/register">Register</router-link>
@@ -142,6 +146,10 @@ body {
   height: 60px;
   position: relative;
   z-index: 100;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
 }
 
 .logo img {
@@ -256,13 +264,13 @@ a:hover:after {
     left: 0;
     flex-direction: column;
     width: 100%;
-    background-color: #fff;
-    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
     list-style-type: none;
-    padding-left: 0;
     transition: all 0.3s ease;
     overflow: hidden;
     max-height: 0;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
 
   .menu-button-container {
