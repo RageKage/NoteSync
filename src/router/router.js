@@ -11,7 +11,7 @@ const router = createRouter({
     { path: "/sign-in", component: () => import("../views/Signin.vue") },
     {
       path: "/new-note",
-      name: 'New Note',
+      name: "New Note",
       component: () => import("../views/NewNote.vue"),
       meta: {
         requireAuth: true, // Specify that this route requires authentication
@@ -20,19 +20,26 @@ const router = createRouter({
     ,
     {
       path: "/my-notes",
-      name: 'My Notes',
+      name: "My Notes",
       component: () => import("../views/userNotes.vue"),
       meta: {
         requireAuth: true, // Specify that this route requires authentication
       },
-    },{
+    },
+    {
       path: "/profile",
-      name: 'profile',
-      component: () => import("../views/profilePage.vue")
-    },{
+      name: "profile",
+      component: () => import("../views/profilePage.vue"),
+    },
+    {
       path: "/resetPassword",
-      name: 'resetPassword',
-      component: () => import("../views/passwordresetPage.vue")
+      name: "resetPassword",
+      component: () => import("../views/passwordresetPage.vue"),
+    },
+    {
+      path: "/example",
+      name: "example",
+      component: () => import("../views/example.vue"),
     },
     {
       // This is a catch-all route for any paths that don't match the above routes
@@ -40,7 +47,7 @@ const router = createRouter({
       // Define the name for this catch-all route
       name: "Error",
       // Define the component that will be displayed when this route is active
-      component: () => import ("../views/Errorpage.vue"),
+      component: () => import("../views/Errorpage.vue"),
     },
   ],
 });

@@ -17,9 +17,9 @@
       </div>
       <p v-if="errMsg" class="error-message">{{ errMsg }}</p>
     </form>
-    <div class="form-submit-container">
+    <div class="form-submit-container" >
       <button class="form-submit-button" @click="handleSignIn">Submit</button>
-      <button class="form-google-button" @click="signInWithGoogle">
+      <button class="form-google-button" @click="signInWithGoogle" v-if="notshow.value">
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
           alt="Google Logo"
@@ -27,7 +27,7 @@
         />
         Sign in with Google
       </button>
-      <div class="forgot-password">
+      <div class="forgot-password" v-if="notshow.value">
         <router-link class="forgot-password-btn" to="/resetPassword"> Forgot Password</router-link>
       </div>
     </div>
@@ -44,6 +44,7 @@ const authUserStore = useAuthUserStore();
 const email = ref("");
 const password = ref("");
 const errMsg = ref("");
+const notshow = false
 
 const handleSignIn = async () => {
   const response = await authUserStore.registerOrSignIn(
@@ -86,7 +87,7 @@ const signInWithGoogle = async () => {
     router.push("/my-notes");
   } else {
     // console.log(response.error);
-    // alert(response.error.message);
+    alert(response.error.message);
   }
 };
 </script>

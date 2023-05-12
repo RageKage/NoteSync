@@ -102,13 +102,13 @@ const onPressEnter = (e) => {
   }
 };
 
-const textarea = ref(null);
+// const textarea = ref(null);
 
 // set up a watch to adjust textarea height
-watch(noteContent, () => {
-  textarea.value.style.height = "auto";
-  textarea.value.style.height = `${textarea.value.scrollHeight}px`;
-});
+// watch(noteContent, () => {
+//   textarea.value.style.height = "auto";
+//   textarea.value.style.height = `${textarea.value.scrollHeight}px`;
+// });
 </script>
 
 <style scoped>
@@ -157,9 +157,11 @@ textarea {
   width: 100%;
   padding: 10px;
   font-size: 1.2rem;
-  border-radius: 4px;
-  border: 2px solid #ccc;
+  /* border-radius: 4px; */
+  border: 2px solid #eeebeb;
   transition: border-color 0.3s ease-in-out;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 input[type="text"]:focus,
 textarea:focus {
@@ -173,6 +175,9 @@ button.btn {
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
+
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 button.primary {
   background-color: #6d9eeb;

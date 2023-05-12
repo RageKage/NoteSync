@@ -1,0 +1,42 @@
+{
+  "users": {
+    "9gEAHGzUdCWFvJRkUFWp5OW4O4y1": {
+      "displayName": "sender name",
+      "email": "sender@gmail.com",
+      "photoURL": "sender@gmail.com photo",
+      "notes": {
+        "kaGpPkM0": {
+          "content": "buenas tardesujiu",
+          "date": "05/08/23",
+          "id": "kaGpPkM0",
+          "title": "esto es una prueba",
+          "shared": {
+            "recipientUserId": {
+              "displayName": "receiver name",
+              "email": "receiver@example.com"
+            }
+          }
+        }
+      }
+    },
+    "recipientUserId": {
+      "displayName": "receiver name",
+      "email": "receiver@example.com",
+      "photoURL": "receiver@example.com photo",
+      "notes": {
+        "kaGpPkM0": {
+          "content": "buenas tardesujiu",
+          "date": "05/08/23",
+          "id": "kaGpPkM0",
+          "title": "esto es una prueba",
+          "shared": {
+            "9gEAHGzUdCWFvJRkUFWp5OW4O4y1": {
+              "displayName": "sender name",
+              "email": "sender@gmail.com"
+            }
+          }
+        }
+      }
+    }
+  }
+}

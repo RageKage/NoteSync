@@ -20,13 +20,14 @@
           your personal notes!
         </p>
         <ul>
-          <li>🚀 Key features:</li>
+          <li>🚀 Key features: </li>
           <li>✍️ Create, read, update, and delete notes with ease</li>
           <li>
             🔄 Real-time data synchronization with Firebase Realtime Database
           </li>
           <li>🔒 Secure user sign-up and sign-in using Google OAuth</li>
           <li>🌐 Responsive design for a great experience on any device</li>
+          <li>🔗 Easily share your notes with fellow users</li>
         </ul>
         <p>
           Developed with Vue.js, Firebase, and Vite, the

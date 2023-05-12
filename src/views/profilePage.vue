@@ -15,7 +15,7 @@
                 {{ userEmail }}
               </p>
             </div>
-            <div class="password">
+            <div class="password" v-if="!isGuest">
               <label for="password-reset" class="password-label"
                 >Password reset:</label
               >
@@ -23,7 +23,6 @@
                 <button
                   id="password-reset"
                   @click="passwordreset(userEmail)"
-                  v-if="!isGuest"
                   class="password-reset-btn"
                 >
                   Reset
@@ -45,6 +44,8 @@ import {
 } from "firebase/auth";
 import { ref, onBeforeUnmount, computed, onMounted } from "vue";
 import { useAuthUserStore } from "../stores/authUser.js";
+import Swal from "sweetalert2";
+
 
 const authUserStore = useAuthUserStore();
 
@@ -106,7 +107,6 @@ const displayedImage = computed(() => {
 const passwordreset = async (userEmail) => {
   const result = await authUserStore.resetPassword(userEmail);
   if (result.success) {
-    router.push("/sign-in");
     return Swal.fire({
       text: `Password reset email sent!`,
       icon: "success",

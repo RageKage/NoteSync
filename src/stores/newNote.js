@@ -60,7 +60,7 @@ export const useNotesStore = defineStore("notes", () => {
     const currentUser = auth.currentUser;
 
     if (currentUser) {
-      // if current user is logged in then go ahead and save that under the current notes collection
+      // if current user is logged in then go ahead and save that under the current user notes collection
       const db = getDatabase();
 
       // Determine the current user is a guest
@@ -74,6 +74,8 @@ export const useNotesStore = defineStore("notes", () => {
         db,
         `${collection}/${currentUser.uid}/notes/${uniqueId}`
       );
+
+      console.log(noteRef)
 
       dbSet(noteRef, newNote);
     }
