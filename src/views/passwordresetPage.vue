@@ -1,10 +1,10 @@
 <template>
-  <div class="reset-container">
-    <h1>Reset Password</h1>
+  <div class="reset-container bg-white flex flex-col items-center justify-center">
+    <h1 class="text-black">Reset Password</h1>
     <form class="w-full max-w-sm" @submit.prevent="resetPassword">
-      <div class="flex items-center border-b border-teal-500 py-2">
+      <div class="flex items-center border-b border-black py-2">
         <input
-          class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+          class="appearance-none bg-transparent border-none w-full text-black mr-3 py-1 px-2 leading-tight focus:outline-none"
           type="text"
           placeholder="...@example.com"
           aria-label="Full email"
@@ -12,14 +12,14 @@
           required
         />
         <button
-          class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
+          class="flex-shrink-0 bg-black hover:bg-gray-700 border-black hover:border-gray-700 text-sm border-4 text-white py-1 px-2 rounded"
           type="button"
           @click="passwordreset()"
         >
           Reset Password
         </button>
         <button
-          class="flex-shrink-0 border-transparent border-4 text-teal-500 hover:text-teal-800 text-sm py-1 px-2 rounded"
+          class="flex-shrink-0 border-transparent border-4 text-black hover:text-gray-700 text-sm py-1 px-2 rounded"
           type="button"
           @click="goback()"
         >
@@ -29,6 +29,9 @@
     </form>
   </div>
 </template>
+
+
+
 
 <script setup>
 // Imports
