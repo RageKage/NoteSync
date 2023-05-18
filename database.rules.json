@@ -1,15 +1,35 @@
 {
   "rules": {
+    ".read": false,
+    ".write": false,
+
     "users": {
       "$uid": {
-        ".read": "$uid === auth.uid",
-        ".write": "$uid === auth.uid"
+        ".read": "auth != null",
+        ".write": "auth != null"
       }
     },
+
     "guests": {
-      "$guestId": {
-        ".read": "auth.uid !== null",
-        ".write": "auth.uid !== null"
+      "$uid": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    },
+
+    "shared_notes": {
+      "$noteId": {
+        ".read": "root.child('users/'+auth.uid+'/notes/'+$noteId).exists() || root.child('guests/'+auth.uid+'/notes/'+$noteId).exists() || data.child('recipients/'+auth.uid).exists()",
+        ".write": "root.child('users/'+auth.uid+'/notes/'+$noteId).exists() || root.child('guests/'+auth.uid+'/notes/'+$noteId).exists() || newData.child('recipients/'+auth.uid).exists()"
+      }
+    },
+
+    "user_emails": {
+      "users": {
+        "$email": {
+          ".read": "auth != null",
+          ".write": "$email === auth.token.email.replace('.', '_')"
+        }
       }
     }
   }

@@ -6,12 +6,12 @@ import { getDatabase, ref as dbRef, set as dbSet } from "firebase/database";
 export const useNotesStore = defineStore("notes", () => {
   const notes = ref([]);
 
+  // Function definitions
   const getCurrentUser = () => {
     const auth = getAuth();
     const user = auth.currentUser;
     return user;
   };
-
   const generateUniqueId = (length = 8) => {
     // this will generate a unique id that is 8 characters long and unique when called
     const characters =
@@ -25,7 +25,6 @@ export const useNotesStore = defineStore("notes", () => {
 
     return uniqueId;
   };
-
   const addNote = (title, content) => {
     // will be passed a title and content
 
@@ -75,7 +74,7 @@ export const useNotesStore = defineStore("notes", () => {
         `${collection}/${currentUser.uid}/notes/${uniqueId}`
       );
 
-      console.log(noteRef)
+      console.log(noteRef);
 
       dbSet(noteRef, newNote);
     }

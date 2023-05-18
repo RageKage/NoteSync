@@ -1,4 +1,3 @@
-// src/stores/authUser.js
 import { defineStore } from "pinia";
 import {
   getAuth,
@@ -19,6 +18,7 @@ export const useAuthUserStore = defineStore("authUser", () => {
   const guestImg =
     "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.jpg";
 
+  // Function definitions
   const registerOrSignIn = async (email, password, name, isSignIn) => {
     // by isSignIn is set to true so that they can login if they are in the
     const auth = getAuth();
@@ -56,6 +56,8 @@ export const useAuthUserStore = defineStore("authUser", () => {
           displayName: name,
           photoURL: guestImg,
         });
+
+        await addUserEmailToDatabase(user.email, user.uid);
       }
 
       return { success: true, user };
@@ -81,6 +83,8 @@ export const useAuthUserStore = defineStore("authUser", () => {
           displayName: user.displayName,
           photoURL: user.photoURL,
         });
+
+        await addUserEmailToDatabase(user.email, user.uid);
       }
 
       return { success: true, user };
@@ -88,7 +92,7 @@ export const useAuthUserStore = defineStore("authUser", () => {
       return { success: false, error: err };
     }
   };
-
+  
   const generateString = (length) => {
     // this will generate a unique id that is 8 characters long and unique when called
     const characters =
@@ -102,7 +106,6 @@ export const useAuthUserStore = defineStore("authUser", () => {
 
     return uniqueId;
   };
-
   const createGuest = () => {
     const username = `guest_${generateString(8)}`;
     const password = `guest_${generateString(12)}`;
@@ -129,6 +132,10 @@ export const useAuthUserStore = defineStore("authUser", () => {
       photoURL: user.photoURL,
     });
 
+    console.log("wait")
+
+    await addUserEmailToDatabase(user.email, user.uid);
+
     let email = user.email;
 
     // Return the guest credentials to display them in a modal
@@ -143,6 +150,17 @@ export const useAuthUserStore = defineStore("authUser", () => {
     } catch (error) {
       return { success: false, error };
     }
+  };
+
+  const addUserEmailToDatabase = async (email, uid) => {
+    const db = getDatabase();
+    const emailKey = emailToKey(email);
+    const userEmailRef = dbRef(db, `user_emails/users/${emailKey}`);
+    await dbSet(userEmailRef, uid);
+  };
+
+  const emailToKey = (email) => {
+    return email.replace(/[.#$\[\]]/g, "_");
   };
 
   return {

@@ -28,11 +28,7 @@
 
     <div class="form-submit-container">
       <button class="form-submit-button" @click="handleRegister">Submit</button>
-      <button
-        class="form-google-button"
-        @click="signInWithGoogle"
-        v-if="notshow.value"
-      >
+      <button class="form-google-button" @click="signInWithGoogle">
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
           alt="Google Logo"
@@ -58,36 +54,33 @@
 </template>
 
 <script setup>
+// Imports
 import { ref, onMounted } from "vue";
 import router from "../router/router";
 import { useAuthUserStore } from "../stores/authUser.js";
 import Swal from "sweetalert2";
 
+// Pinia store instance
 const authUserStore = useAuthUserStore();
+
+// Refs
 const email = ref("");
 const password = ref("");
 const userName = ref("");
-// ! this hides some of the elements
-const notshow = false;
-
 const showModal = ref(false);
 const guestCredentials = ref(null);
 
-onMounted(() => {
-  // Show an alert informing the user that login with Google is temporarily disabled
-  const alertKey = "ShowAlert";
-  const alert = localStorage.getItem(alertKey); // use the local storage to show the alert once 
+// ! This hides some of the elements
+const notshow = false;
 
-  if (!alert) {
-    Swal.fire({
-      icon: "info",
-      title: "Attention!",
-      text: "Please continue as a Guest, as the 'Login with Google' feature is currently disabled while we work on resolving system issues. We apologize for any inconvenience.",
-    });
-  }
-
-  localStorage.setItem(alertKey, true)
-});
+// Functions
+const showAlert = (icon, title, text) => {
+  return Swal.fire({
+    icon: icon,
+    title: title,
+    text: text,
+  });
+};
 
 const closeModal = () => {
   showModal.value = false;
@@ -96,35 +89,30 @@ const closeModal = () => {
 
 const handleRegister = async () => {
   // Register with email
-  if (!email.value || !password.value || !userName.value) {
-    return Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: "Please fill in all required fields!",
-    });
+  if (!email.value && !password.value) {
+    return showAlert("error", "Oops...", "Please fill in all required fields!");
   }
   const response = await authUserStore.registerOrSignIn(
     email.value,
     password.value,
     userName.value
   );
+
   if (response.success) {
     console.log("Successfully registered!");
-    router.push("/new-note"); // take them to the new note page when they login in
+    router.push("/new-note");
   } else {
-    // Check if the error is related to the email being already in use or invalid
     if (
       response.error.code === "auth/email-already-in-use" ||
       response.error.code === "auth/invalid-email"
     ) {
+      // Check if the error is related to the email being already in use or invalid
       email.value = "";
-      return Swal.fire({
-        icon: "info",
-        title: "Oops...",
-        text: "The email you provided is already in use or isn't valid. Please try again",
-      });
-    } else {
-      // Handle other errors, e.g., show another Swal.fire() with a specific error message
+      return showAlert(
+        "info",
+        "Oops...",
+        "The email you provided is already in use or isn't valid. Please try again"
+      );
     }
   }
 };
@@ -132,6 +120,7 @@ const handleRegister = async () => {
 const signInWithGoogle = async () => {
   // sign in with Google
   const response = await authUserStore.signInWithGoogle();
+
   if (response.success) {
     console.log("Successfully registered!");
     router.push("/new-note");
@@ -143,6 +132,20 @@ const signInAsGuest = async () => {
   console.log(guestCredentials);
   showModal.value = true;
 };
+
+// Event Listeners
+onMounted(() => {
+  const alertKey = "ShowAlert";
+  const alert = localStorage.getItem(alertKey);
+  if (!alert) {
+    showAlert(
+      "info",
+      "Attention!",
+      "Please continue as a Guest, as the 'Login with Google' feature is currently disabled while we work on resolving system issues. We apologize for any inconvenience."
+    );
+    localStorage.setItem(alertKey, true);
+  }
+});
 </script>
 
 <style scoped>
@@ -152,6 +155,8 @@ const signInAsGuest = async () => {
   flex-direction: column;
   align-items: center;
   padding: 1rem;
+
+  flex-wrap: wrap;
 }
 .form {
   display: flex;
@@ -184,6 +189,8 @@ const signInAsGuest = async () => {
 /* registration form  */
 .form-title {
   margin-top: 0;
+  font-size: 3rem;
+  margin-bottom: 1rem;
 }
 .form-input-container {
   display: flex;

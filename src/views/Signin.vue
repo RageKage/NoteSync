@@ -17,9 +17,9 @@
       </div>
       <p v-if="errMsg" class="error-message">{{ errMsg }}</p>
     </form>
-    <div class="form-submit-container" >
+    <div class="form-submit-container">
       <button class="form-submit-button" @click="handleSignIn">Submit</button>
-      <button class="form-google-button" @click="signInWithGoogle" v-if="notshow.value">
+      <button class="form-google-button" @click="signInWithGoogle">
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
           alt="Google Logo"
@@ -27,25 +27,33 @@
         />
         Sign in with Google
       </button>
-      <div class="forgot-password" v-if="notshow.value">
-        <router-link class="forgot-password-btn" to="/resetPassword"> Forgot Password</router-link>
+      <div class="forgot-password">
+        <router-link class="forgot-password-btn" to="/resetPassword">
+          Forgot Password</router-link
+        >
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+// Imports
 import { ref } from "vue";
 import router from "../router/router";
 import { useAuthUserStore } from "../stores/authUser.js";
 
-// pinia store instance for authentication
+// Pinia store instance for authentication
 const authUserStore = useAuthUserStore();
+
+// Refs
 const email = ref("");
 const password = ref("");
 const errMsg = ref("");
-const notshow = false
 
+// This hides some of the elements
+const notshow = false;
+
+// Functions
 const handleSignIn = async () => {
   const response = await authUserStore.registerOrSignIn(
     email.value,
@@ -53,18 +61,14 @@ const handleSignIn = async () => {
     null,
     true
   );
-
   if (response.success) {
     console.log("Successfully Sign-in!");
     router.push("/new-note");
   } else {
-    // console.log(response.error);
-
-    // alert(response.error.message);
     switch (
-      response.error.code // a switch to handle different type of error when signing in has failed
+      response.error.code // handle different types of error when signing in has failed
     ) {
-      case "auth/invalid-email": // if the api returns invalid-email then show that to the user
+      case "auth/invalid-email":
         errMsg.value = "Invalid email";
         break;
       case "auth/user-not-found":
@@ -86,7 +90,6 @@ const signInWithGoogle = async () => {
     console.log("Successfully registered!");
     router.push("/my-notes");
   } else {
-    // console.log(response.error);
     alert(response.error.message);
   }
 };
@@ -99,6 +102,8 @@ const signInWithGoogle = async () => {
   flex-direction: column;
   align-items: center;
   padding: 1rem;
+
+  flex-wrap: wrap;
 }
 .form {
   display: flex;
@@ -131,6 +136,8 @@ const signInWithGoogle = async () => {
 /* registration form  */
 .form-title {
   margin-top: 0;
+  font-size: 3rem;
+  margin-bottom: 1rem;
 }
 .form-input-container {
   display: flex;

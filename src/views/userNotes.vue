@@ -1,10 +1,52 @@
 <template>
   <div>
+    <!-- Modal for search results -->
+    <div
+      v-if="searchResultsModalOpen"
+      class="modal-overlay-share"
+      @click="closeSearchResultsModal"
+    >
+      <div class="modal-Search">
+        <h2>Search Results:</h2>
+        <div class="Search-actions">
+          <div v-if="searchResults.length > 0">
+            <div
+              v-for="note in searchResults"
+              :key="note.id"
+              class="search-results"
+            >
+              <div class="Search-note-title">Title: {{ note.title }}</div>
+              <div class="Search-note-content">Date: {{ note.date }}</div>
+              <div class="Search-note-content">Content: {{ note.content }}</div>
+            </div>
+          </div>
+          <div v-else class="no-results">
+            <p>No matching notes found.</p>
+          </div>
+          <button class="btn secondary" @click="closeSearchResultsModal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
     <template v-if="notes && notes.length > 0">
       <div class="notes-app">
         <section class="notes-list">
           <header class="notes-header">
             <h2>My Notes</h2>
+
+            <div class="search">
+              <input
+                type="text"
+                id="searchInput"
+                class="search-input"
+                placeholder="Search By Title"
+                v-model="searchWords"
+                @keyup.enter="onPressEnter"
+              />
+              <button class="search-button" @click="searchNotes">Search</button>
+            </div>
           </header>
           <div class="notes-container">
             <div v-for="note in notes" :key="note.id" class="note-item">
@@ -20,9 +62,13 @@
                   Edit
                 </button>
 
+                <!-- Modal for Editing Notes -->
                 <teleport to="body">
-                  <div v-if="isOpen && noteToEdit.id === note.id">
-                    <div class="modal-overlay" @click="closeModal"></div>
+                  <div
+                    v-if="isOpen && noteToEdit.id === note.id"
+                    class="modal-overlay-share"
+                  >
+                    <div class="modal-overlay-share" @click="closeModal"></div>
                     <div class="modal">
                       <h2>Edit Note</h2>
                       <label for="edit-note-title">Title:</label>
@@ -54,6 +100,9 @@
                     Share
                   </button>
                   <!--  -->
+
+                  <!-- Modal for Sharing Notes -->
+
                   <teleport to="body">
                     <div v-if="shareOpen && noteToShare.id === note.id">
                       <div
@@ -111,7 +160,6 @@
 import { ref, onMounted, watchEffect } from "vue";
 import { getAuth, signOut } from "firebase/auth";
 import Swal from "sweetalert2";
-
 import {
   getDatabase,
   ref as dbRef,
@@ -122,341 +170,57 @@ import {
   update as dbUpdate,
   onValue,
 } from "firebase/database";
+import useNotes from "../composables/useNotes.js";
+import useSharing from "../composables/useSharing.js";
+// import "../assets/components_CSS/userNotes.css"; // CSS for header
 
-// main ref
-const noteToEdit = ref({});
-const notes = ref([]);
-const isOpen = ref(false);
-const noteTitle = ref("");
-const noteContent = ref("");
-const editingNote = ref(false);
+// Composables
+const {
+  editNoteText,
+  noteToEdit,
+  notes,
+  isOpen,
+  noteTitle,
+  noteContent,
+  editingNote,
+  closeModal,
+  updateNote,
+  deleteNote,
+  showShareModal,
+  shareOpen,
+  noteToShare,
+  closeShareModal,
+  email,
+  onPressEnter,
+  closeSearchResultsModal,
+  searchNotes,
+  searchWords,
+  searchResults,
+  searchResultsModalOpen,
+} = useNotes();
 
-// share refs
-const email = ref(null);
-const noteToShare = ref(null);
-const shareOpen = ref(false);
-const noteShare = ref({});
+const { shareNote, userExists, loadNotes, getCurrentUser } = useSharing(
+  notes,
+  email
+);
 
 onMounted(() => {
   getCurrentUser();
 });
-
-// opening and closing a modal window
-const closeModal = () => {
-  isOpen.value = false;
-  editingNote.value = false;
-};
-
-const showShareModal = (note) => {
-  const alertKey = "ShowShareAlert";
-  const alert = localStorage.getItem(alertKey); // use the local storage to show the alert once
-
-  console.log("shareNote called, alert value:", alert); // Add this line to check the value of alert
-
-  if (!alert) {
-    Swal.fire({
-      icon: "info",
-      title: "Attention!",
-      text: "For now you can share notes with users that have an account with us",
-    }).then(() => {
-      localStorage.setItem(alertKey, true); // set localStorage only after the alert is shown
-    });
-  }
-
-  noteToShare.value = note;
-  shareOpen.value = true;
-};
-
-const closeShareModal = () => {
-  shareOpen.value = false;
-};
-
-// Functions
-
-const getCurrentUser = () => {
-  const auth = getAuth();
-  const user = auth.currentUser;
-  if (user) {
-    loadNotes(user);
-  }
-  return user;
-};
-
-// editing a notes
-const editNoteText = (id) => {
-  // this will find the id of the note that was clicked and then show them that content in the modal
-  isOpen.value = true;
-  for (let i = 0; i < notes.value.length; i++) {
-    if (notes.value[i].id === id) {
-      editingNote.value = true;
-      noteToEdit.value = {
-        ...notes.value[i],
-        index: i,
-      };
-      noteTitle.value = notes.value[i].title;
-      noteContent.value = notes.value[i].content;
-
-      break;
-    }
-  }
-};
-
-const updateNote = (noteToEditRef) => {
-  // Update the note reference from the editNoteText
-  console.log("note T oEdit Ref:", noteToEditRef);
-
-  if (editingNote.value) {
-    const note = noteToEditRef;
-    const uniqueId = note.id; // get the note id
-
-    const updatedNote = {
-      // update the note with the new content or title
-      id: uniqueId,
-      title: note.title,
-      content: note.content,
-      date: new Date().toLocaleDateString("en-US", {
-        month: "2-digit",
-        day: "2-digit",
-        year: "2-digit",
-      }),
-    };
-
-    if (!updatedNote.title) {
-      return Swal.fire({
-        text: `You can't set the title empty when updating it`,
-        icon: "info",
-      });
-    } else if (!updatedNote.content) {
-      return Swal.fire({
-        text: `You can't set the content empty when updating it`,
-        icon: "info",
-      });
-    }
-
-    console.log("updatedNote:", updatedNote);
-
-    const auth = getAuth();
-    const currentUser = auth.currentUser; // auth the user
-
-    if (currentUser) {
-      // if the user is authenticated then continue
-      const db = getDatabase(); // get the database
-
-      console.log(updatedNote);
-
-      const isGuest = currentUser.email.endsWith("@notesync.com");
-
-      const collection = isGuest ? "guests" : "users";
-
-      // get the notes of the current user
-      const noteRef = dbRef(
-        db,
-        `${collection}/${currentUser.uid}/notes/${note.id}`
-      );
-
-      dbUpdate(noteRef, updatedNote) // note this will go ahead and use the note reference and update it with the new note Object
-        .then(() => {
-          console.log("Note updated in the database");
-          const noteIndex = notes.value.findIndex((n) => n.id === uniqueId);
-          if (noteIndex > -1) {
-            notes.value.splice(noteIndex, 1, updatedNote);
-          } else {
-            console.error("Cannot find note with id:", uniqueId);
-          }
-
-          // Close the modal and reset the form and editing state
-          closeModal();
-          noteTitle.value = "";
-          noteContent.value = "";
-          editingNote.value = false;
-          noteToEdit.value = {};
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  }
-};
-
-// deleting a note by id
-const deleteNote = (id) => {
-  const auth = getAuth();
-
-  // current authenticated user
-  const currentUser = auth.currentUser;
-
-  if (currentUser) {
-    const db = getDatabase();
-
-    for (let i = 0; i < notes.value.length; i++) {
-      if (notes.value[i].id === id) {
-        const noteKey = notes.value[i].id;
-
-        if (noteKey) {
-          Swal.fire({
-            text: `Are you sure you want to remove ${notes.value[i].title} ?`,
-            icon: "warning",
-            showCancelButton: true,
-          }).then((result) => {
-            if (result.value) {
-              const isGuest = currentUser.email.endsWith("@notesync.com");
-              const collection = isGuest ? "guests" : "users";
-
-              // get the notes of the current user
-              const noteRef = dbRef(
-                db,
-                `${collection}/${currentUser.uid}/notes/${noteKey}`
-              );
-
-              // this should remove the note from the database
-              dbRemove(noteRef)
-                .then(() => {
-                  // remove from the array as well
-                  notes.value.splice(i, 1);
-                })
-                .catch((error) => {
-                  console.error(error);
-                });
-            } else {
-              // The user clicked "Cancel"
-              // Do nothing
-            }
-          });
-        }
-        break;
-      }
-    }
-  }
-};
-
-// this will load the notes of the current user
-const loadNotes = async (user) => {
-  const db = getDatabase(); // get the database
-
-  // check if the user is a guest
-  const isGuest = user.email.endsWith("@notesync.com");
-
-  const collection = isGuest ? "guests" : "users"; // if yes then go to the guest notes collection
-
-  const notesRef = dbRef(db, `${collection}/${user.uid}/notes`);
-
-  try {
-    const snapshot = await dbGet(notesRef); // get the snapshot of the notes of the current user
-    const data = snapshot.val();
-    if (data) {
-      // if the data exists, then turn it into a an array and add it to the notes
-      const notesArray = Object.keys(data).map((key) => ({
-        id: key,
-        ...data[key],
-      }));
-      notes.value = notesArray;
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const shareNote = async (noteID, noteData) => {
-  const receiver = await userExists(email.value); // method that searches for if the email it is sending to exists
-
-  if (!email.value) {
-    email.value = "";
-    return Swal.fire({
-      text: `Please add the email you're sending to.`,
-      icon: "info",
-    });
-  } else if (!receiver) {
-    email.value = "";
-    return Swal.fire({
-      text: `The email you're sending to does not exist in our database.`,
-      icon: "error",
-    });
-  }
-
-  if (getCurrentUser()) {
-    const db = getDatabase();
-
-    const isGuest = receiver.email.endsWith("@notesync.com"); // check if the receiver is a guest
-
-    const collection = isGuest ? "guests" : "users"; // if the receiver is a guest
-
-    const receiverUid = receiver.uid;
-    const receiverNoteRef = dbRef(
-      db,
-      `${collection}/${receiverUid}/notes/${noteID}` // then mod the collection so that it sends to the guest collection
-    );
-    await dbSet(receiverNoteRef, noteData); // give them the note object that was shared to the user it was sent to
-  }
-};
-
-const userExists = async (receiverID) => {
-  const db = getDatabase();
-  const usersRef = dbRef(db, "users");
-  const guestsRef = dbRef(db, "guests");
-
-  const usersSnapshot = await dbGet(usersRef);
-  const guestsSnapshot = await dbGet(guestsRef);
-
-  let found = false;
-
-  //  look at the users collection
-  if (usersSnapshot.exists()) {
-    usersSnapshot.forEach((childSnapshot) => {
-      if (childSnapshot.val().email === receiverID) {
-        found = {
-          uid: childSnapshot.key,
-          ...childSnapshot.val(),
-        };
-        return true; // break the forEach loop
-      }
-    });
-  }
-
-  // look at the guests collection if not found in users
-  if (!found && guestsSnapshot.exists()) {
-    guestsSnapshot.forEach((childSnapshot) => {
-      if (childSnapshot.val().email === receiverID) {
-        found = {
-          uid: childSnapshot.key,
-          ...childSnapshot.val(),
-        };
-        return true;
-      }
-    });
-  }
-
-  return found;
-};
 </script>
 
 <style scoped>
-* {
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  background-color: #f5f5f5;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #333;
-
-  /* background-color: #f1f1f1;
-  font-family: "Helvetica Neue", sans-serif; */
-}
-
 /* Modal Styles */
 .modal {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  left: 50%;
+  padding: 16px;
   position: fixed;
   top: 50%;
-  left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #ffffff;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-  z-index: 100;
+  z-index: 1001;
 }
 
 .modal h2 {
@@ -469,27 +233,29 @@ label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 700;
+  color: gray;
 }
 
-input,
+.modal input,
 textarea {
   display: block;
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  font-size: 1rem;
   margin-bottom: 1rem;
   flex: 1;
   word-wrap: break-word;
   max-height: 400px;
   max-width: 800px;
-  min-width: 300px;
   min-width: 400px;
   overflow: auto;
+  width: 100%;
+  padding: 10px;
+  font-size: 1.2rem;
+  border: 2px solid #eeebeb;
+  transition: border-color 0.3s ease-in-out;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Note Actions  */
+/* Note Actions */
 .note-actions {
   display: flex;
   justify-content: space-between;
@@ -508,7 +274,6 @@ textarea {
   background-color: #07c;
   border: none;
   cursor: pointer;
-
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
@@ -526,13 +291,15 @@ textarea {
   transform: translateY(1px);
 }
 
-/* Notes App  */
+/* Notes App */
 .notes-app {
   margin: 50px auto;
   max-width: 1200px;
-  padding: 20px;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .notes-header {
@@ -545,7 +312,7 @@ textarea {
   color: #444;
 }
 
-/* Note List  */
+/* Note List */
 .notes-list {
   margin-top: 40px;
 }
@@ -556,7 +323,7 @@ textarea {
   color: #444;
 }
 
-/* Note Details  */
+/* Note Details */
 .note-details {
   flex: 1;
   word-wrap: break-word;
@@ -570,21 +337,32 @@ textarea {
   transition: transform 0.2s ease-in-out;
 }
 
-.note-details:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+.note-title {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
 }
 
-.note-details p.old {
-  font-size: 1.2rem;
+.bold {
+  font-weight: 700;
+}
+
+.note-date {
+  font-size: 14px;
   color: #666;
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
-/* Old and Date */
-old {
-  overflow: auto;
+.note-content {
+  margin-top: 20px;
+  font-size: 16px;
+  color: #333;
 }
+
+
+
+/* Date */
+
 
 date {
   align-items: left;
@@ -594,7 +372,7 @@ date {
   padding: 1rem;
 }
 
-/* Note Title  */
+/* Note Title */
 .note-title {
   color: #666;
 }
@@ -603,7 +381,7 @@ date {
   color: black;
 }
 
-/* Note Actions  */
+/* Note Actions */
 .note-actions {
   display: flex;
   align-items: center;
@@ -686,7 +464,7 @@ date {
   justify-content: space-between;
 }
 
-/* One column for smaller screens  */
+/* One column for smaller screens */
 @media screen and (min-width: 700px) {
   .notes-container {
     display: flex;
@@ -694,7 +472,7 @@ date {
     gap: 20px;
   }
 
-  /* Note Item smaller screens  */
+  /* Note Item smaller screens */
   .note-item {
     background-color: #ffffff;
     border-radius: 10px;
@@ -707,7 +485,13 @@ date {
     flex-direction: column;
   }
 
-  /* Note Details smaller screens  */
+  .note-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transition: transform 0.6s ease-in-out;
+  }
+
+  /* Note Details smaller screens */
   .note-details {
     flex: 1;
     word-wrap: break-word;
@@ -729,8 +513,7 @@ date {
   }
 }
 
-/*  share modal */
-
+/* Share modal */
 .modal-overlay-share {
   background-color: rgba(0, 0, 0, 0.4);
   height: 100%;
@@ -783,5 +566,129 @@ date {
 .share-actions {
   display: flex;
   justify-content: space-between;
+}
+
+/* Search section */
+.search {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  justify-items: center;
+  padding: 20px;
+}
+
+.search label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.search-input {
+  padding: 10px;
+  font-size: 1.2rem;
+  border: 2px solid #eeebeb;
+  transition: border-color 0.3s ease-in-out;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-button {
+  padding: 10px;
+  font-size: 1.2rem;
+  border: 2px solid #eeebeb;
+  transition: border-color 0.3s ease-in-out;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: none;
+  cursor: pointer;
+  background-color: #07c;
+  color: #fff;
+  margin-left: 10px;
+}
+
+.search-button:hover {
+  background-color: #2a5993;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+/* Modal overlay styles */
+.modal-overlay-share {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+/* Modal box styles */
+.modal-Search {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  width: 400px;
+  /* height: 400px; */
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Modal title styles */
+.modal-Search h2 {
+  margin-bottom: 20px;
+}
+
+/* Search actions container styles */
+.Search-actions {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Note title and content styles */
+.Search-note-title,
+.Search-note-content {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+}
+
+.Search-note-title {
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #356637;
+  color: white;
+}
+
+.Search-note-content {
+  font-size: 16px;
+  background-color: #f1f1f1;
+  color: #333;
+  border: 1px solid #1f0d0d;
+}
+
+/* No results modal CSS */
+.no-results p {
+  font-size: 16px;
+  color: #888;
+}
+
+.search-results {
+  flex: 1;
+  word-wrap: break-word;
+  max-height: 300px;
+  overflow: auto;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  padding: 20px;
+  transition: transform 0.2s ease-in-out;
 }
 </style>

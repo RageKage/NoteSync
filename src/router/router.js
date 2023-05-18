@@ -1,10 +1,10 @@
 // Import necessary modules
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory , createWebHashHistory} from "vue-router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 // Create the router instance with the specified routes
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: [
     { path: "/", component: () => import("../views/Home.vue") },
     { path: "/register", component: () => import("../views/Register.vue") },
@@ -36,11 +36,11 @@ const router = createRouter({
       name: "resetPassword",
       component: () => import("../views/passwordresetPage.vue"),
     },
-    {
-      path: "/example",
-      name: "example",
-      component: () => import("../views/example.vue"),
-    },
+    // {
+    //   path: "/example",
+    //   name: "example",
+    //   component: () => import("../views/example.vue"),
+    // },
     {
       // This is a catch-all route for any paths that don't match the above routes
       path: "/:pathMatch(.*)*",
@@ -50,6 +50,7 @@ const router = createRouter({
       component: () => import("../views/Errorpage.vue"),
     },
   ],
+  linkActiveClass: "header-active-link"
 });
 
 // Helper function to get the currently authenticated user

@@ -2,15 +2,9 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router/router";
-import dotenv from 'dotenv';
-
-
-
+import dotenv from "dotenv";
 
 const app = createApp(App);
-
-
-
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -26,9 +20,6 @@ const firebaseConfig = {
   messagingSenderId: "301161007204",
   appId: "1:301161007204:web:030d2521e5fe13235c3771",
 };
-
-// dotenv.config();
-
 
 // Initialize the Firebase app with the configured credentials
 initializeApp(firebaseConfig);

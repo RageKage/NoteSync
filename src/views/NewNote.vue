@@ -45,6 +45,7 @@
 import { ref, onMounted, watch } from "vue";
 import { useNotesStore } from "../stores/newNote.js";
 import Swal from "sweetalert2";
+// import "../assets/components_CSS/newnote.css"
 
 // pinia Store instance for creating new notes
 const notesStore = useNotesStore();
@@ -102,88 +103,88 @@ const onPressEnter = (e) => {
   }
 };
 
-// const textarea = ref(null);
-
-// set up a watch to adjust textarea height
-// watch(noteContent, () => {
-//   textarea.value.style.height = "auto";
-//   textarea.value.style.height = `${textarea.value.scrollHeight}px`;
-// });
 </script>
 
 <style scoped>
-body {
-  background-color: #f1f1f1;
-  font-family: "Helvetica Neue", sans-serif;
-}
-
-/*  main notes app */
+/* Notes App styles */
 .notes-app {
-  border-radius: 2rem;
-  margin: 50px auto;
-  max-width: 800px;
-  padding: 40px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-.notes-header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-.notes-header h1 {
-  font-size: 2.5rem;
-  color: #444;
+    border-radius: 2rem;
+    margin: 50px auto;
+    max-width: 800px;
+    padding: 40px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* notes form group */
+/* Notes Header styles */
+.notes-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.notes-header h1 {
+    font-size: 2.5rem;
+    color: #444;
+}
+
+/* Form group styles */
 .form-group {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
+
 .form-group textarea {
-  flex: 1;
-  word-wrap: break-word;
-  max-height: 300px;
-  overflow: auto;
-  resize: vertical;
+    flex: 1;
+    word-wrap: break-word;
+    max-height: 300px;
+    overflow: auto;
+    resize: vertical;
 }
+
 label {
-  display: block;
-  font-size: 1.1rem;
-  margin-bottom: 5px;
-  color: #666;
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    color: #666;
 }
+
 input[type="text"],
 textarea {
-  width: 100%;
-  padding: 10px;
-  font-size: 1.2rem;
-  /* border-radius: 4px; */
-  border: 2px solid #eeebeb;
-  transition: border-color 0.3s ease-in-out;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    padding: 10px;
+    font-size: 1.2rem;
+    border: 2px solid #eeebeb;
+    transition: border-color 0.3s ease-in-out;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+
 input[type="text"]:focus,
 textarea:focus {
-  outline: 0;
-  border-color: #6d9eeb;
+    outline: 0;
+    border-color: #6d9eeb;
 }
-button.btn {
-  padding: 10px 20px;
-  font-size: 1.2rem;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
 
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+/* Button styles */
+button.btn {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+
 button.primary {
-  background-color: #6d9eeb;
-  color: #fff;
+    background-color: #6d9eeb;
+    color: #fff;
 }
+
 button.primary:hover {
-  background-color: #4c7ebd;
+    background-color: #4c7ebd;
 }
+
 </style>
+
+
