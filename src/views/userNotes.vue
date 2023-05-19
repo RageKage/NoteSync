@@ -50,11 +50,19 @@
           </header>
           <div class="notes-container">
             <div v-for="note in notes" :key="note.id" class="note-item">
+              <p
+                v-if="sharedNotes[note.id] && sharedNotes[note.id].sharedStatus"
+                class="sharedButtonNote"
+              >
+                {{ sharedNotes[note.id].sharedStatus }}
+              </p>
+
               <div class="note-details">
                 <h3 class="note-title title">
                   Title: <b class="bold">{{ note.title }}</b>
                 </h3>
                 <p class="note-date"><b>Date created:</b> {{ note.date }}</p>
+
                 <p class="note-content">{{ note.content }}</p>
               </div>
               <div class="note-actions">
@@ -199,13 +207,26 @@ const {
   searchResultsModalOpen,
 } = useNotes();
 
-const { shareNote, userExists, loadNotes, getCurrentUser } = useSharing(
-  notes,
-  email
-);
+const { shareNote, userExists, loadNotes, getCurrentUser, noteSharedLabel } =
+  useSharing(notes, email);
+
+const sharedNotes = ref({}); // Create a ref to store IDs of shared notes
+
+watchEffect(async () => {
+  // checks for changes in the notes array in the shared_notes collection and checks each note object and stores it in sharedNotes object
+  const sharedNotesPromises = notes.value.map(async (note) => {
+    const sharedNoteInfo = await noteSharedLabel(note.id);
+    return [note.id, sharedNoteInfo || { isShared: false, sharedStatus: "" }]; //
+  });
+
+  const noteShares = await Promise.all(sharedNotesPromises);
+
+  sharedNotes.value = Object.fromEntries(noteShares);
+});
 
 onMounted(() => {
   getCurrentUser();
+  console.log(sharedNotes )
 });
 </script>
 
@@ -359,10 +380,7 @@ textarea {
   color: #333;
 }
 
-
-
 /* Date */
-
 
 date {
   align-items: left;
@@ -690,5 +708,37 @@ body {
   margin: 10px;
   padding: 20px;
   transition: transform 0.2s ease-in-out;
+}
+
+.sharedButtonNote {
+  margin-left: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+
+  background: rgb(218, 89, 255);
+  background: radial-gradient(
+    circle,
+    rgba(218, 89, 255, 1) 0%,
+    rgba(148, 187, 233, 1) 100%
+  );
+
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  font-weight: bolder;
 }
 </style>

@@ -1,46 +1,65 @@
 // Import necessary modules
-import { createRouter, createWebHistory , createWebHashHistory} from "vue-router";
+import {
+  createRouter,
+  createWebHistory,
+  createWebHashHistory,
+} from "vue-router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 // Create the router instance with the specified routes
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
-    { path: "/", component: () => import("../views/Home.vue") },
-    { path: "/register", component: () => import("../views/Register.vue") },
-    { path: "/sign-in", component: () => import("../views/Signin.vue") },
+    {
+      path: "/",
+      component: () => import("../views/Home.vue"),
+      meta: { title: "Home" },
+    },
+    {
+      path: "/register",
+      component: () => import("../views/Register.vue"),
+      meta: { title: "Register" },
+    },
+    {
+      path: "/sign-in",
+      component: () => import("../views/Signin.vue"),
+      meta: { title: "Sign In" },
+    },
     {
       path: "/new-note",
       name: "New Note",
       component: () => import("../views/NewNote.vue"),
       meta: {
         requireAuth: true, // Specify that this route requires authentication
+        title: "New Note",
       },
     },
-    ,
     {
       path: "/my-notes",
       name: "My Notes",
       component: () => import("../views/userNotes.vue"),
       meta: {
         requireAuth: true, // Specify that this route requires authentication
+        title: "My Notes",
       },
     },
     {
       path: "/profile",
       name: "profile",
       component: () => import("../views/profilePage.vue"),
+      meta: {
+        requireAuth: true,
+        title: "Profile",
+      },
     },
     {
       path: "/resetPassword",
       name: "resetPassword",
       component: () => import("../views/passwordresetPage.vue"),
+      meta: {
+        title: "Reset Password",
+      },
     },
-    // {
-    //   path: "/example",
-    //   name: "example",
-    //   component: () => import("../views/example.vue"),
-    // },
     {
       // This is a catch-all route for any paths that don't match the above routes
       path: "/:pathMatch(.*)*",
@@ -48,10 +67,12 @@ const router = createRouter({
       name: "Error",
       // Define the component that will be displayed when this route is active
       component: () => import("../views/Errorpage.vue"),
+      meta: { title: "Error" },
     },
   ],
-  linkActiveClass: "header-active-link"
+  linkActiveClass: "header-active-link",
 });
+
 
 // Helper function to get the currently authenticated user
 const getCurrentUser = () => {
@@ -83,5 +104,10 @@ router.beforeEach(async (to, from, next) => {
     next(); // Allow the navigation to proceed
   }
 });
+
+router.afterEach((to) => {
+  document.title = to.meta.title || 'Default Title';
+});
+
 
 export default router; // Export the router instance for use in other parts of the application

@@ -6,6 +6,7 @@ import {
   get as dbGet,
   set as dbSet,
   update as dbUpdate,
+  onValue,
 } from "firebase/database";
 import { ref } from "vue";
 import Swal from "sweetalert2";
@@ -21,17 +22,14 @@ export default function useSharing(notes, email) {
 
   // Checks if a user exists in the database based on their email
   const userExists = async (email) => {
-
     const db = getDatabase();
     const userEmailKey = emailToKey(email);
     const userEmailsRef = dbRef(db, "user_emails/users/" + userEmailKey);
 
-    console.log(userEmailsRef)
+    console.log(userEmailsRef);
     const snapshot = await dbGet(userEmailsRef);
 
     if (snapshot.exists()) {
-
-
       const uid = snapshot.val();
       const isGuest = email.endsWith("@notesync.com");
       const collection = isGuest ? "guests" : "users";
@@ -106,45 +104,85 @@ export default function useSharing(notes, email) {
           content: note.content,
           createdAt: note.date,
         },
+        originalSharer: currentUser.uid,
         recipients: {
-          [receiverUid]: {
-            sharedBy: currentUser.uid,
-            sharedWith: {
-              [currentUser.uid]: true,
-            },
-          },
+          [receiverUid]: true,
         },
       };
       const sharedNoteSnapshot = await dbGet(sharedNoteRef);
       if (sharedNoteSnapshot.exists()) {
-        await dbUpdate(sharedNoteRef, sharedNoteData);
+        const existingData = sharedNoteSnapshot.val();
+
+        // instead of overwriting the existing data add the new data of recipients
+
+        existingData.recipients[receiverUid] = true;
+
+        await dbSet(sharedNoteRef, existingData);
+
+        if (currentUser.uid !== existingData.originalSharer) {
+          // update existing note object when shared back
+          const SharerNoteRef = dbRef(
+            db,
+            `users/${existingData.originalSharer}/notes/${noteID}`
+          );
+          await dbSet(sharedNoteRef, SharerNoteRef);
+        }
       } else {
         await dbSet(sharedNoteRef, sharedNoteData);
       }
     }
   };
 
-  // Loads the notes of the current user
+  // load the notes of the current user
   const loadNotes = async (user) => {
     const db = getDatabase();
     const isGuest = user.email.endsWith("@notesync.com");
     const collection = isGuest ? "guests" : "users";
     const notesRef = dbRef(db, `${collection}/${user.uid}/notes`);
-    try {
-      const snapshot = await dbGet(notesRef);
-      const data = snapshot.val();
-      if (data) {
-        const notesArray = Object.keys(data).map((key) => ({
-          id: key,
-          ...data[key],
-        }));
-        notes.value = notesArray;
+
+    onValue(
+      notesRef,
+      (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          const notesArray = Object.keys(data).map((key) => ({
+            id: key,
+            ...data[key],
+          }));
+
+          notes.value = notesArray;
+
+          // save notes to local storage
+          localStorage.setItem(`${user.uid}/notes`, JSON.stringify(notesArray));
+        }
+      },
+      (error) => {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
-    }
+    );
   };
 
+  const noteSharedLabel = async (NoteID) => {
+    // show the user notes that are shared with them and notes they shared
+    const currentUser = getCurrentUser();
+    const db = getDatabase();
+    const sharedNoteRef = dbRef(db, `shared_notes/${NoteID}`);
+
+    const snapshot = await dbGet(sharedNoteRef);
+    if (snapshot.exists()) {
+      const sharedNoteData = snapshot.val();
+      // check if a note has been shared with them
+      if (sharedNoteData.recipients[currentUser.uid]) {
+        return { isShared: true, sharedStatus: "Shared with you." };
+      }
+
+      // check if they shared a note
+      if (sharedNoteData.originalSharer === currentUser.uid) {
+        return { isShared: true, sharedStatus: "Shared" };
+      }
+    }
+    return { isShared: false, sharedStatus: "" };
+  };
 
   return {
     shareNote,
@@ -152,5 +190,6 @@ export default function useSharing(notes, email) {
     loadNotes,
     getCurrentUser,
     notes,
+    noteSharedLabel,
   };
 }

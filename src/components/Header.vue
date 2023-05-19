@@ -8,11 +8,15 @@
       >
         <div class="logo" v-if="showUser && windowWidth > 701">
           <a @click="router.push('/')" class="photo-a-text">
-            <img src="../assets/notebooknd-shop.jpeg" alt="NoteSync" />
-            <span
+            <img
+              src="../assets/notebooknd-shop.jpeg"
+              alt="NoteSync"
+              class="w-12 h-13 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+            />
+            <!-- <span
               class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
               >NoteSync</span
-            >
+            > -->
           </a>
         </div>
         <input id="menu-toggle" type="checkbox" v-model="menuOpen" />
@@ -50,7 +54,7 @@
           </li>
         </ul>
 
-        <div class="pop-up" v-if=" signedIn && showHeader">
+        <div class="pop-up" v-if="signedIn && showHeader">
           <button
             v-if="!dontShow"
             type="button"
@@ -59,7 +63,11 @@
             id="user-menu-button"
           >
             <span class="sr-only">Open user menu</span>
-            <img class="photo-icon" :src="displayedImage" alt="user photo" />
+            <img
+              class="w-12 h-13 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+              :src="displayedImage"
+              alt="user photo"
+            />
           </button>
 
           <div v-if="smallMenuOpen" id="smallMenu" @click="!smallMenuClose">
@@ -97,7 +105,7 @@ import router from "../router/router";
 import { useRoute } from "vue-router";
 import Swal from "sweetalert2";
 import { useAuthUserStore } from "../stores/authUser.js";
-import "../assets/style.module.css"; // tailwind css
+import "../assets/test.css"; // tailwind css
 import "../assets/components_CSS/header.css"; // CSS for header
 
 // Constants and refs
@@ -203,3 +211,4 @@ onUnmounted(() => {
   });
 });
 </script>
+
