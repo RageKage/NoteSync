@@ -1,5 +1,5 @@
 <template>
-<div>
+<div >
   <Header></Header>
     <router-view></router-view>
   <!-- <Footer></Footer> -->
@@ -17,3 +17,6 @@ import router from './router/router';
 import Header from './components/Header.vue'
 </script>
 
+<style>
+
+</style>

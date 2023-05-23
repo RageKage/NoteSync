@@ -6,6 +6,7 @@ import {
   signInWithPopup,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  updateProfile
 } from "firebase/auth";
 import {
   getDatabase,

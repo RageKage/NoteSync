@@ -25,23 +25,32 @@ html {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 1rem;
 }
-/* .logo img {
-    height: 50px;
-  }
-  
-  .logo {
-    display: flex;
-  } */
 
-.logo {
+/* .logo {
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
+} */
+
+.logo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }
 
 .logo img {
-  max-width: 60px;
+  width: 40px;
+  height: 40px;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+.logo span {
+  font-size: 18px;
+  font-weight: bold;
+  white-space: nowrap;
+  color: #333;
 }
 
 .show-men-button {
@@ -49,8 +58,6 @@ html {
   align-items: center;
   text-decoration: none;
   color: inherit;
-
-
 }
 
 /* .photo-a-text {
@@ -59,6 +66,8 @@ html {
     text-decoration: none;
     color: inherit;
     position: fixed;
+
+    
   }
   
   .photo-a-text img {
@@ -201,7 +210,6 @@ html {
 .photo-icon {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
 }
 .sr-only {
   position: absolute;
@@ -290,7 +298,7 @@ html {
     display: flex;
     gap: 20px;
     border-radius: 8px;
-    margin-bottom: 2rem;
+    /* margin-bottom: 2rem; */
     text-align: center;
     box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.1);
     flex-wrap: nowrap;
@@ -300,3 +308,7 @@ html {
     color: red;
   }
 }
+
+
+
+

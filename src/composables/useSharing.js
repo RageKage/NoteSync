@@ -106,7 +106,10 @@ export default function useSharing(notes, email) {
         },
         originalSharer: currentUser.uid,
         recipients: {
-          [receiverUid]: true,
+          [receiverUid]: {
+            email: receiver.email,
+            accepted: true,
+          },
         },
       };
       const sharedNoteSnapshot = await dbGet(sharedNoteRef);
@@ -115,7 +118,7 @@ export default function useSharing(notes, email) {
 
         // instead of overwriting the existing data add the new data of recipients
 
-        existingData.recipients[receiverUid] = true;
+        existingData.recipients[receiverUid].accepted = true;
 
         await dbSet(sharedNoteRef, existingData);
 
@@ -171,17 +174,25 @@ export default function useSharing(notes, email) {
     const snapshot = await dbGet(sharedNoteRef);
     if (snapshot.exists()) {
       const sharedNoteData = snapshot.val();
-      // check if a note has been shared with them
-      if (sharedNoteData.recipients[currentUser.uid]) {
-        return { isShared: true, sharedStatus: "Shared with you." };
+
+      // check if a note has been shared with them and if they have accepted it
+      if (
+        sharedNoteData.recipients[currentUser.uid] &&
+        sharedNoteData.recipients[currentUser.uid].accepted
+      ) {
+        return {
+          isShared: true,
+          sharedStatus: "Shared with you by. . .",
+          sharerEmail: sharedNoteData.recipients[currentUser.uid].email,
+        };
       }
 
       // check if they shared a note
       if (sharedNoteData.originalSharer === currentUser.uid) {
-        return { isShared: true, sharedStatus: "Shared" };
+        return { isShared: true, sharedStatus: "Shared by you" };
       }
     }
-    return { isShared: false, sharedStatus: "" };
+    return { isShared: false, sharedStatus: null };
   };
 
   return {

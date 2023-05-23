@@ -6,19 +6,23 @@
         v-if="showHeader && showHeader2"
         :style="{ fontSize: fontSize }"
       >
-        <div class="logo" v-if="showUser && windowWidth > 701">
-          <a @click="router.push('/')" class="photo-a-text">
+        <div class="logo" v-if="showUser && windowWidth > 701"  @click="router.push('/')">
+          <div>
             <img
-              src="../assets/notebooknd-shop.jpeg"
+              src="../assets/pngfind.com-indiana-outline-png-2131193.png"
               alt="NoteSync"
-              class="w-12 h-13 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+             class="photo-icon"
+          
             />
-            <!-- <span
+          </div>
+          <div>
+            <span
               class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
               >NoteSync</span
-            > -->
-          </a>
+            >
+          </div>
         </div>
+        <!--  -->
         <input id="menu-toggle" type="checkbox" v-model="menuOpen" />
         <label class="menu-button-container" for="menu-toggle">
           <div class="menu-button"></div>
@@ -42,11 +46,7 @@
           </li>
           <li v-if="!signedIn" @click="closeMenu" class="menu-link">
             <span class="separator" v-if="!dontShow">|</span>
-            <router-link to="/register">Register</router-link>
-          </li>
-          <li v-if="!signedIn" @click="closeMenu" class="menu-link">
-            <span class="separator" v-if="!dontShow">|</span>
-            <router-link to="/sign-in">Sign In</router-link>
+            <router-link to="/register">Sign-Up/Sign-In</router-link>
           </li>
           <li v-if="windowWidth <= 700" @click="closeMenu" class="menu-link">
             <span class="separator" v-if="!dontShow">|</span>
@@ -64,10 +64,12 @@
           >
             <span class="sr-only">Open user menu</span>
             <img
-              class="w-12 h-13 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+            class="photo-icon"
               :src="displayedImage"
               alt="user photo"
             />
+            <!--               class="w-12 h-13 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+ -->
           </button>
 
           <div v-if="smallMenuOpen" id="smallMenu" @click="!smallMenuClose">
@@ -105,7 +107,7 @@ import router from "../router/router";
 import { useRoute } from "vue-router";
 import Swal from "sweetalert2";
 import { useAuthUserStore } from "../stores/authUser.js";
-import "../assets/test.css"; // tailwind css
+import "../assets/style.module.css"; // tailwind css
 import "../assets/components_CSS/header.css"; // CSS for header
 
 // Constants and refs
@@ -152,7 +154,7 @@ const smallMenuClose = () => {
 const signOut = async () => {
   try {
     await signOutFirebase(auth);
-    router.push("/sign-in");
+    router.push("/register");
   } catch (error) {
     console.error(error);
   }

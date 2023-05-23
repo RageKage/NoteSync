@@ -42,7 +42,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { ref, onBeforeUnmount, computed, onMounted } from "vue";
 import { useAuthUserStore } from "../stores/authUser.js";
 import Swal from "sweetalert2";
-import "../assets/components_CSS//profile.css";
+// import "../assets/components_CSS//profile.css";
 
 
 // Pinia store instance for auth user
@@ -120,4 +120,116 @@ onBeforeUnmount(() => {
 });
 </script>
 
+
+
+<style scoped>
+
+
+
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Profile */
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+/* img */
+.log {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.log img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* User-info */
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.user {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.email-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.email-value {
+  margin: 0;
+}
+
+.password {
+  font-size: 1rem;
+  font-weight: normal;
+  color: #000000;
+
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  margin-top: 1rem;
+}
+
+.password p {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #34495e;
+}
+
+.password button {
+  border: none;
+  color: #ffffff;
+  font-size: 0.6rem;
+  margin-left: 0.5rem;
+  padding: 0.2rem 0.9rem;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
+  background-color: #f44336;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.password button:hover {
+  background-color: #da190b;
+}
+
+
+</style>
 

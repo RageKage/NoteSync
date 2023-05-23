@@ -21,14 +21,19 @@ const router = createRouter({
       meta: { title: "Register" },
     },
     {
-      path: "/sign-in",
-      component: () => import("../views/Signin.vue"),
-      meta: { title: "Sign In" },
-    },
-    {
       path: "/new-note",
       name: "New Note",
       component: () => import("../views/NewNote.vue"),
+      meta: {
+        requireAuth: true, // Specify that this route requires authentication
+        title: "New Note",
+      },
+    },
+    ,
+    {
+      path: "/testing",
+      name: "Testing",
+      component: () => import("../views/a.vue"),
       meta: {
         requireAuth: true, // Specify that this route requires authentication
         title: "New Note",
@@ -73,7 +78,6 @@ const router = createRouter({
   linkActiveClass: "header-active-link",
 });
 
-
 // Helper function to get the currently authenticated user
 const getCurrentUser = () => {
   return new Promise((resolve, reject) => {
@@ -106,8 +110,7 @@ router.beforeEach(async (to, from, next) => {
 });
 
 router.afterEach((to) => {
-  document.title = to.meta.title || 'Default Title';
+  document.title = to.meta.title || "Default Title";
 });
-
 
 export default router; // Export the router instance for use in other parts of the application

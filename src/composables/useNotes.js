@@ -27,7 +27,7 @@ export default function useNotes() {
   const shareOpen = ref(false);
 
   // searching refs
-  const searchWords = ref(""); 
+  const searchWords = ref("");
   const searchResults = ref([]); // Array to store the search results
   const searchResultsModalOpen = ref(false);
 
@@ -220,62 +220,34 @@ export default function useNotes() {
     }
   };
 
-  const searchNotes = () => {
+  const searchNotes = () => { // search notes method that will be search the string you pass it
     const auth = getAuth();
-
     const isGuest = auth.currentUser.email.endsWith("@notesync.com");
-
     const collection = isGuest ? "guests" : "users";
-
     const db = getDatabase();
     const noteRef = dbRef(db, `${collection}/${auth.currentUser.uid}/notes`);
-
+  
     onValue(noteRef, (snapshot) => {
+      if (searchWords.value == "") {
+        searchResultsModalOpen.value = false; 
+        return
+      }
       const notes = snapshot.val();
-      if (notes) {
-        const matchingNotes = Object.values(notes).filter(
-          (note) =>
-            note.title.toLowerCase() === searchWords.value.toLowerCase() ||
-            note.date === searchWords.value
-        );
+      if (notes) { // if there are notes
+        const matchingNotes = Object.values(notes).filter((note) => {
+          const searchName = searchWords.value.replace(/\s/g, "").toLowerCase(); // remove any spaces in the search word
+          const titleWithoutSpaces = note.title.replace(/\s/g, "").toLowerCase();
+          return titleWithoutSpaces.includes(searchName); // if they match return that 
+        });
         searchResults.value = matchingNotes;
         searchResultsModalOpen.value = true;
       }
     });
-
-    searchWords.value = "";
-  };
-
-  const onPressEnter = (e) => {
-    if (e.key == "Enter") {
-      const auth = getAuth();
-
-      const isGuest = auth.currentUser.email.endsWith("@notesync.com");
-
-      const collection = isGuest ? "guests" : "users";
-
-      const db = getDatabase();
-      const noteRef = dbRef(db, `${collection}/${auth.currentUser.uid}/notes`);
-
-      onValue(noteRef, (snapshot) => {
-        const notes = snapshot.val();
-        if (notes) {
-          const matchingNotes = Object.values(notes).filter(
-            (note) =>
-              note.title.toLowerCase() === searchWords.value.toLowerCase() ||
-              note.date === searchWords.value
-          );
-          searchResults.value = matchingNotes;
-          searchResultsModalOpen.value = true;
-        }
-      });
-
-      searchWords.value = "";
-    }
   };
 
   const closeSearchResultsModal = () => {
     searchResultsModalOpen.value = false; // Close the search results modal
+    searchWords.value = ""
   };
 
   return {
@@ -295,7 +267,6 @@ export default function useNotes() {
     closeShareModal,
     getCurrentUser,
     email,
-    onPressEnter,
     closeSearchResultsModal,
     searchNotes,
     searchWords,
