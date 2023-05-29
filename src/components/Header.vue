@@ -6,13 +6,16 @@
         v-if="showHeader && showHeader2"
         :style="{ fontSize: fontSize }"
       >
-        <div class="logo" v-if="showUser && windowWidth > 701"  @click="router.push('/')">
+        <div
+          class="logo"
+          v-if="showUser && windowWidth > 701"
+          @click="router.push('/')"
+        >
           <div>
             <img
               src="../assets/pngfind.com-indiana-outline-png-2131193.png"
               alt="NoteSync"
-             class="photo-icon"
-          
+              class="photo-icon"
             />
           </div>
           <div>
@@ -63,11 +66,7 @@
             id="user-menu-button"
           >
             <span class="sr-only">Open user menu</span>
-            <img
-            class="photo-icon"
-              :src="displayedImage"
-              alt="user photo"
-            />
+            <img class="photo-icon" :src="displayedImage" alt="user photo" />
             <!--               class="w-12 h-13 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
  -->
           </button>
@@ -168,14 +167,6 @@ const toggleShowBasedOFFScreenWidth = () => {
   showUser.value = window.innerWidth > 700;
 };
 
-const calculateFontSize = () => {
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-  const smallerDimension = Math.min(width, height);
-
-  fontSize.value = `${Math.max(smallerDimension / 40, 10)}px`;
-};
-
 // Watchers
 watch(windowWidth, () => {
   toggleShowBasedOnScreenWidth();
@@ -213,4 +204,3 @@ onUnmounted(() => {
   });
 });
 </script>
-

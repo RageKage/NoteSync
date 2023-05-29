@@ -255,8 +255,13 @@ const {
   searchResultsModalOpen,
 } = useNotes();
 
-const { shareNote, userExists, loadNotes, getCurrentUser, noteSharedLabel } =
-  useSharing(notes, email);
+const {
+  shareNote,
+  userExists,
+  loadNotes,
+  getCurrentUser,
+  noteSharedLabel,
+} = useSharing(notes, email);
 
 const sharedNotes = ref({}); // Create a ref to store IDs of shared notes
 
@@ -282,6 +287,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/*  */
 .app {
   position: relative;
   overflow: hidden; /* Ensure the blob remains visible even when scrolling */
@@ -461,12 +467,6 @@ label {
   transition: transform 0.2s ease-in-out;
 }
 
-.note-title {
-  margin: 0;
-  font-size: 24px;
-  color: #333;
-}
-
 .bold {
   font-weight: 700;
 }
@@ -482,6 +482,8 @@ label {
   font-size: 16px;
   color: #333;
   white-space: pre-wrap;
+
+  
 }
 
 /* Date */
@@ -496,6 +498,8 @@ date {
 
 /* Note Title */
 .note-title {
+  margin: 0;
+  font-size: 20px;
   color: #666;
 }
 
@@ -547,13 +551,14 @@ date {
 
 /* Empty Notes */
 .empty-notes {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  text-align: center;
-  padding: 20px;
+  padding: 2rem;
+    border-radius: 30px;
+    margin-bottom: 2rem;
+    text-align: center;
+    box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    color: #000;
+
 }
 
 .empty-notes h2 {

@@ -92,7 +92,7 @@ export default function useNotes() {
     }
   };
 
-  const updateNote = (noteToEditRef) => {
+  const updateNote = async (noteToEditRef) => {
     // Update the note reference from the editNoteText
     console.log("note T oEdit Ref:", noteToEditRef);
 
@@ -145,8 +145,9 @@ export default function useNotes() {
           `${collection}/${currentUser.uid}/notes/${note.id}`
         );
 
-        dbUpdate(noteRef, updatedNote) // note this will go ahead and use the note reference and update it with the new note Object
-          .then(() => {
+        try {
+          // note this will go ahead and use the note reference and update it with the new note Object
+          await dbUpdate(noteRef, updatedNote).then(() => {
             console.log("Note updated in the database");
             const noteIndex = notes.value.findIndex((n) => n.id === uniqueId);
             if (noteIndex > -1) {
@@ -161,16 +162,16 @@ export default function useNotes() {
             noteContent.value = "";
             editingNote.value = false;
             noteToEdit.value = {};
-          })
-          .catch((error) => {
-            console.error(error);
           });
+        } catch (err) {
+          console.error(err);
+        }
       }
     }
   };
 
   // deleting a note by id
-  const deleteNote = (id) => {
+  const deleteNote = async (id) => {
     const auth = getAuth();
 
     // current authenticated user
@@ -184,11 +185,13 @@ export default function useNotes() {
           const noteKey = notes.value[i].id;
 
           if (noteKey) {
-            Swal.fire({
-              text: `Are you sure you want to remove ${notes.value[i].title} ?`,
-              icon: "warning",
-              showCancelButton: true,
-            }).then((result) => {
+            try {
+              const result = await Swal.fire({
+                text: `Are you sure you want to remove ${notes.value[i].title} ?`,
+                icon: "warning",
+                showCancelButton: true,
+              });
+
               if (result.value) {
                 const isGuest = currentUser.email.endsWith("@notesync.com");
                 const collection = isGuest ? "guests" : "users";
@@ -200,44 +203,42 @@ export default function useNotes() {
                 );
 
                 // this should remove the note from the database
-                dbRemove(noteRef)
-                  .then(() => {
-                    // remove from the array as well
-                    notes.value.splice(i, 1);
-                  })
-                  .catch((error) => {
-                    console.error(error);
-                  });
-              } else {
-                // The user clicked "Cancel"
-                // Do nothing
+                await dbRemove(noteRef);
+                // remove from the array as well
+                notes.value.splice(i, 1);
               }
-            });
+            } catch (error) {
+              console.error(error);
+            }
+            break;
           }
-          break;
         }
       }
     }
   };
 
-  const searchNotes = () => { // search notes method that will be search the string you pass it
+  const searchNotes = () => {
+    // search notes method that will be search the string you pass it
     const auth = getAuth();
     const isGuest = auth.currentUser.email.endsWith("@notesync.com");
     const collection = isGuest ? "guests" : "users";
     const db = getDatabase();
     const noteRef = dbRef(db, `${collection}/${auth.currentUser.uid}/notes`);
-  
+
     onValue(noteRef, (snapshot) => {
       if (searchWords.value == "") {
-        searchResultsModalOpen.value = false; 
-        return
+        searchResultsModalOpen.value = false;
+        return;
       }
       const notes = snapshot.val();
-      if (notes) { // if there are notes
+      if (notes) {
+        // if there are notes
         const matchingNotes = Object.values(notes).filter((note) => {
           const searchName = searchWords.value.replace(/\s/g, "").toLowerCase(); // remove any spaces in the search word
-          const titleWithoutSpaces = note.title.replace(/\s/g, "").toLowerCase();
-          return titleWithoutSpaces.includes(searchName); // if they match return that 
+          const titleWithoutSpaces = note.title
+            .replace(/\s/g, "")
+            .toLowerCase();
+          return titleWithoutSpaces.includes(searchName); // if they match return that
         });
         searchResults.value = matchingNotes;
         searchResultsModalOpen.value = true;
@@ -247,7 +248,7 @@ export default function useNotes() {
 
   const closeSearchResultsModal = () => {
     searchResultsModalOpen.value = false; // Close the search results modal
-    searchWords.value = ""
+    searchWords.value = "";
   };
 
   return {

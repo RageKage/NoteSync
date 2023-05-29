@@ -19,4 +19,10 @@ import Header from './components/Header.vue'
 
 <style>
 
+@media screen and (max-width: 700px) {
+  * {
+    font-size: 15px;
+  }
+}
+
 </style>

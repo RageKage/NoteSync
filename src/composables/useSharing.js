@@ -158,9 +158,11 @@ export default function useSharing(notes, email) {
           // save notes to local storage
           localStorage.setItem(`${user.uid}/notes`, JSON.stringify(notesArray));
         }
+
       },
       (error) => {
         console.error(error);
+
       }
     );
   };
