@@ -33,6 +33,7 @@ export const useNotesStore = defineStore("notes", () => {
 
     const newNote = {
       // new note object with the given title and content
+      
       id: uniqueId,
       title: title,
       content: content,
@@ -64,7 +65,7 @@ export const useNotesStore = defineStore("notes", () => {
 
       // Determine the current user is a guest
       const isGuest = currentUser.email.endsWith("@notesync.com");
-      console.log("Is Guest:", isGuest);
+      // console.log("Is Guest:", isGuest);
 
       // if a user then go save their note in the notes collection if guest then go ahead and save their note in the guests notes collection
       const collection = isGuest ? "guests" : "users";
@@ -74,9 +75,10 @@ export const useNotesStore = defineStore("notes", () => {
         `${collection}/${currentUser.uid}/notes/${uniqueId}`
       );
 
-      console.log(noteRef);
+      // console.log(noteRef);
 
       dbSet(noteRef, newNote);
+      console.log(noteRef, newNote);
     }
   };
 

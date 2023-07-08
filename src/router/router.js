@@ -16,6 +16,11 @@ const router = createRouter({
       meta: { title: "Home" },
     },
     {
+      path: "/hello",
+      component: () => import("../views/test.vue"),
+    }
+    ,
+    {
       path: "/register",
       component: () => import("../views/Register.vue"),
       meta: { title: "Register" },

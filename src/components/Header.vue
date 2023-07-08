@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="nav-container">
+    <div class="nav-container" :style="{ top: navBarTop }">
       <section
         class="top-nav"
         v-if="showHeader && showHeader2"
@@ -36,23 +36,23 @@
             <router-link to="/">Home</router-link>
           </li>
           <li v-if="signedIn" @click="closeMenu" class="menu-link">
-            <span class="separator" v-if="!dontShow">|</span>
+            <span class="separator" v-if="!dontShow"></span>
             <router-link to="/new-note">New Note</router-link>
           </li>
           <li v-if="signedIn" @click="closeMenu" class="menu-link">
-            <span class="separator" v-if="!dontShow">|</span>
+            <span class="separator" v-if="!dontShow"></span>
             <router-link to="/my-notes">My Notes</router-link>
           </li>
           <li v-if="windowWidth <= 700" @click="closeMenu" class="menu-link">
-            <span class="separator" v-if="!dontShow">|</span>
+            <span class="separator" v-if="!dontShow"></span>
             <router-link to="/profile" v-if="signedIn">Profile</router-link>
           </li>
           <li v-if="!signedIn" @click="closeMenu" class="menu-link">
-            <span class="separator" v-if="!dontShow">|</span>
+            <span class="separator" v-if="!dontShow"></span>
             <router-link to="/register">Sign-Up/Sign-In</router-link>
           </li>
           <li v-if="windowWidth <= 700" @click="closeMenu" class="menu-link">
-            <span class="separator" v-if="!dontShow">|</span>
+            <span class="separator" v-if="!dontShow"></span>
             <a class="nav-signOut" @click="signOut" v-if="signedIn">Sign Out</a>
           </li>
         </ul>
@@ -202,5 +202,27 @@ onUnmounted(() => {
   window.removeEventListener("resize", () => {
     windowWidth.value = window.innerWidth;
   });
+});
+
+let navBarTop = ref("0px"); // This will hold the top position of the navbar
+
+let previousScrollPos = window.pageYOffset;
+
+const handleScroll = () => {
+  let currentScrollPos = window.pageYOffset;
+  if (previousScrollPos > currentScrollPos) {
+    navBarTop.value = "0px"; // Show the navbar
+  } else {
+    navBarTop.value = "-85px"; // Hide the navbar
+  }
+  previousScrollPos = currentScrollPos;
+};
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
 });
 </script>

@@ -44,7 +44,6 @@ import { useAuthUserStore } from "../stores/authUser.js";
 import Swal from "sweetalert2";
 // import "../assets/components_CSS//profile.css";
 
-
 // Pinia store instance for auth user
 const authUserStore = useAuthUserStore();
 
@@ -120,13 +119,7 @@ onBeforeUnmount(() => {
 });
 </script>
 
-
-
 <style scoped>
-
-
-
-
 /* Container */
 .container {
   max-width: 1200px;
@@ -143,7 +136,13 @@ onBeforeUnmount(() => {
   border-radius: 8px;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
   padding: 2rem;
-  margin-top: 2rem;
+  margin-top: 6rem;
+}
+
+@media screen and (max-width: 700px) {
+  .profile {
+    margin-top: 0.5rem;
+  }
 }
 
 /* img */
@@ -229,7 +228,4 @@ onBeforeUnmount(() => {
 .password button:hover {
   background-color: #da190b;
 }
-
-
 </style>
-

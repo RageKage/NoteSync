@@ -36,8 +36,3 @@ const redirectToHome = () => {
   router.push("/");
 };
 </script>
-
-<style scoped>
-
-</style>
-
