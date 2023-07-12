@@ -1,40 +1,37 @@
 <template>
   <div class="container">
     <div class="profile" v-if="auth">
-      <div class="log">
-        <img :src="displayedImage" alt="User photo" />
-        <div class="user">
-          {{ welcomeMessage }}
-          <p>{{ userName }}</p>
-        </div>
+      <div class="header">
+        <img :src="displayedImage" alt="User photo" class="profile-photo" />
         <div class="user-info">
-          <div class="info-container">
-            <div class="email">
-              <label for="user-email" class="email-label">Email:</label>
-              <p id="user-email" class="email-value">
-                {{ userEmail }}
-              </p>
-            </div>
-            <div class="password" v-if="!isGuest">
-              <label for="password-reset" class="password-label"
-                >Password reset?</label
+          <h1 class="user-name">{{ userName }}</h1>
+          <p class="welcome-message">{{ welcomeMessage }}</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Contact Information</h2>
+        <div class="contact-info">
+          <label for="user-email" class="label">Email:</label>
+          <p id="user-email" class="value">{{ userEmail }}</p>
+          <div v-if="!isGuest" class="password-reset">
+            <label for="password-reset" class="label">Password reset?</label>
+            <p class="password-action">
+              <button
+                id="password-reset"
+                @click="passwordreset(userEmail)"
+                class="password-reset-btn"
               >
-              <p class="password-action">
-                <button
-                  id="password-reset"
-                  @click="passwordreset(userEmail)"
-                  class="password-reset-btn"
-                >
-                  Reset
-                </button>
-              </p>
-            </div>
+                Reset
+              </button>
+            </p>
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script setup>
 // Imports
@@ -118,114 +115,98 @@ onBeforeUnmount(() => {
   resetUserValues();
 });
 </script>
-
-<style scoped>
-/* Container */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-/* Profile */
-.profile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-  margin-top: 6rem;
-}
-
-@media screen and (max-width: 700px) {
-  .profile {
-    margin-top: 0.5rem;
+<style>
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
   }
-}
 
-/* img */
-.log {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.log img {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-}
+  .profile {
+    background-color: #f9f9f9;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 6rem;
 
-/* User-info */
-.user-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 1.5rem;
-}
+    
+  }
 
-.user {
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
+  .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+  }
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 1.5rem;
-}
+  .profile-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
 
-.email-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
+  }
 
-.email-value {
-  margin: 0;
-}
+  .user-info {
+    display: flex;
+    flex-direction: column;
+  }
 
-.password {
-  font-size: 1rem;
-  font-weight: normal;
-  color: #000000;
+  .user-name {
+    font-size: 24px;
+    margin: 0;
+  }
 
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
+  .welcome-message {
+    font-size: 18px;
+    color: #666;
+    margin: 0;
+  }
 
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  .section {
+    margin-bottom: 30px;
+  }
 
-  margin-top: 1rem;
-}
+  .section-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+  }
 
-.password p {
-  font-size: 1rem;
-  font-weight: 400;
-  color: #34495e;
-}
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+  }
 
-.password button {
-  border: none;
-  color: #ffffff;
-  font-size: 0.6rem;
-  margin-left: 0.5rem;
-  padding: 0.2rem 0.9rem;
-  text-transform: uppercase;
-  transition: background-color 0.3s ease;
-  background-color: #f44336;
-  text-decoration: none;
-  cursor: pointer;
-  border-radius: 4px;
-}
+  .label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+  }
 
-.password button:hover {
-  background-color: #da190b;
-}
+  .value {
+    font-size: 16px;
+    color: #666;
+    margin: 0;
+  }
+
+  .password-reset {
+    margin-top: 10px;
+  }
+
+  .password-reset-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .password-reset-btn:hover {
+    background-color: #0056b3;
+  }
 </style>

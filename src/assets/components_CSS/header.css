@@ -11,16 +11,15 @@ html {
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   height: 90px;
   position: relative;
   z-index: 100;
-  background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 1rem;
   font-family: "Roboto";
+  border-bottom: 1px solid #000000;
+  background: #f4f4f4;
 }
 
 .logo {
@@ -203,8 +202,15 @@ html {
 }
 .photo-icon {
   width: 74px;
-
   height: 77px;
+}
+
+.photo-icon-user {
+  width: 74px;
+  height: 77px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+  object-fit: cover;
 }
 .sr-only {
   position: absolute;

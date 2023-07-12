@@ -49,7 +49,7 @@
           </li>
           <li v-if="!signedIn" @click="closeMenu" class="menu-link">
             <span class="separator" v-if="!dontShow"></span>
-            <router-link to="/register">Sign-Up/Sign-In</router-link>
+            <router-link to="/register">Sign-In</router-link>
           </li>
           <li v-if="windowWidth <= 700" @click="closeMenu" class="menu-link">
             <span class="separator" v-if="!dontShow"></span>
@@ -66,7 +66,7 @@
             id="user-menu-button"
           >
             <span class="sr-only">Open user menu</span>
-            <img class="photo-icon" :src="displayedImage" alt="user photo" />
+            <img class="photo-icon-user" :src="displayedImage" alt="user photo" />
             <!--               class="w-12 h-13 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
  -->
           </button>

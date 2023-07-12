@@ -712,7 +712,9 @@ input#edit-note-title {
 .no-notes-message-container {
   text-align: center;
   padding: 20px;
+  margin-top: 6rem;
 }
+
 
 .new-note-link {
   display: inline-block;
