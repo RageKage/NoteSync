@@ -40,6 +40,7 @@ import { ref } from "vue";
 import { useAuthUserStore } from "../stores/authUser.js";
 import router from "../router/router";
 import Swal from "sweetalert2";
+import '@/assets/dark.scss'
 import "../assets/test.css";
 
 // Pinia store instance for auth user

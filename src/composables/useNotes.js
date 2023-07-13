@@ -1,6 +1,7 @@
 import { ref, onMounted, watchEffect } from "vue";
 import { getAuth, signOut } from "firebase/auth";
 import Swal from "sweetalert2";
+import '@/assets/dark.scss'
 import {
   getDatabase,
   ref as dbRef,

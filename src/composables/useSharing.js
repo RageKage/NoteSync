@@ -10,14 +10,20 @@ import {
 } from "firebase/database";
 import { ref } from "vue";
 import Swal from "sweetalert2";
+import "@/assets/dark.scss";
 
 // This function handles the sharing of notes between users
 export default function useSharing(notes, email) {
   // Section 1: Utility Functions
 
-  // Converts email to a Firebase-friendly key
   const emailToKey = (email) => {
-    return email.replace(/[.$\[\]#/]/g, "_");
+    if (email) {
+      return email.replace(/[.$\[\]#/]/g, "_");
+    } else {
+      // Handle null or undefined email here, for example:
+      // console.error('email is null or undefined');
+      return null;
+    }
   };
 
   // Checks if a user exists in the database based on their email
@@ -104,7 +110,10 @@ export default function useSharing(notes, email) {
           content: note.content,
           createdAt: note.date,
         },
-        originalSharer: currentUser.uid,
+        originalSharer: {
+          uid: currentUser.uid,
+          email: currentUser.email,
+        },
         recipients: {
           [receiverUid]: {
             email: receiver.email,
@@ -122,17 +131,26 @@ export default function useSharing(notes, email) {
 
         await dbSet(sharedNoteRef, existingData);
 
-        if (currentUser.uid !== existingData.originalSharer) {
+        if (currentUser.uid !== existingData.originalSharer.uid) {
           // update existing note object when shared back
           const SharerNoteRef = dbRef(
             db,
-            `users/${existingData.originalSharer}/notes/${noteID}`
+            `users/${existingData.originalSharer.uid}/notes/${noteID}`
           );
           await dbSet(sharedNoteRef, SharerNoteRef);
         }
       } else {
         await dbSet(sharedNoteRef, sharedNoteData);
       }
+
+      email.value = "";
+
+      Swal.fire({
+        text: `The note has been successfully shared with ${receiver.email}`,
+        icon: "success",
+        timer: 3000,
+        showConfirmButton: false,
+      });
     }
   };
 
@@ -158,11 +176,9 @@ export default function useSharing(notes, email) {
           // save notes to local storage
           localStorage.setItem(`${user.uid}/notes`, JSON.stringify(notesArray));
         }
-
       },
       (error) => {
         console.error(error);
-
       }
     );
   };
@@ -185,12 +201,12 @@ export default function useSharing(notes, email) {
         return {
           isShared: true,
           sharedStatus: "Shared with you by. . .",
-          sharerEmail: sharedNoteData.recipients[currentUser.uid].email,
+          sharerEmail: sharedNoteData.originalSharer.email,
         };
       }
 
       // check if they shared a note
-      if (sharedNoteData.originalSharer === currentUser.uid) {
+      if (sharedNoteData.originalSharer.uid === currentUser.uid) {
         return { isShared: true, sharedStatus: "Shared by you" };
       }
     }

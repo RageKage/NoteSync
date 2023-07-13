@@ -39,6 +39,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { ref, onBeforeUnmount, computed, onMounted } from "vue";
 import { useAuthUserStore } from "../stores/authUser.js";
 import Swal from "sweetalert2";
+import '@/assets/dark.scss'
 // import "../assets/components_CSS//profile.css";
 
 // Pinia store instance for auth user

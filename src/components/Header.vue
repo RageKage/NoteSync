@@ -105,6 +105,7 @@ import {
 import router from "../router/router";
 import { useRoute } from "vue-router";
 import Swal from "sweetalert2";
+import '@/assets/dark.scss'
 import { useAuthUserStore } from "../stores/authUser.js";
 import "../assets/style.module.css"; // tailwind css
 import "../assets/components_CSS/header.css"; // CSS for header

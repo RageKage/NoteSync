@@ -55,6 +55,7 @@
 import { ref, onMounted, watch } from "vue";
 import { useNotesStore } from "../stores/newNote.js";
 import Swal from "sweetalert2";
+import '@/assets/dark.scss'
 // import "../assets/components_CSS/newnote.css"
 
 // pinia Store instance for creating new notes

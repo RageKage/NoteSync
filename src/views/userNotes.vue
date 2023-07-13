@@ -107,6 +107,7 @@
                         <p class="note-date">{{ note.date }}</p>
                       </div>
                       <div class="note-shared-status-container">
+                        
                         <p
                           @mouseover="hover = note.id"
                           @mouseleave="hover = null"
@@ -260,6 +261,7 @@
 import { ref, onMounted, watchEffect } from "vue";
 import { getAuth, signOut } from "firebase/auth";
 import Swal from "sweetalert2";
+import '@/assets/dark.scss'
 import {
   getDatabase,
   ref as dbRef,
@@ -315,6 +317,8 @@ watchEffect(async () => {
   const noteShares = await Promise.all(sharedNotesPromises);
 
   sharedNotes.value = Object.fromEntries(noteShares);
+
+
 });
 
 onMounted(() => {
@@ -826,5 +830,26 @@ input#share-email {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
+}
+
+/* Shared Notif */
+p.note-shared-status {
+  text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 0em;
+    display: inline-block;
+    padding: 5px;
+    font-size: 14px;
+    padding-left: rem;
+    background-color: #e1e0e0;
+    color: #666;
+    text-align: center;
+    border: 1px solid #333;
+    box-sizing: border-box;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px #0000001a;
+    margin-top: 1rem;
+    cursor: pointer;
 }
 </style>
