@@ -1,29 +1,13 @@
-# Firebase_Vue
+# NoteSync
 
-This template should help get you started developing with Vue 3 in Vite.
+used Vue.js, Firebase, and Vite to create a responsive and user-friendly online application. Using Firebase's Realtime Database for smooth data synchronization, the application enables users to create, read, update, and delete personal notes.
 
-## Recommended IDE Setup
+Try it: [NoteSync](https://notesyncapp.com/#/)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+# Key Features
+1. ✍️ Create, read, update, and delete notes with ease
+2. 🔄 Real-time data synchronization with Firebase Realtime Database
+3. 🔒 Secure user sign-up and sign-in using Google OAuth
+4. 🌐 Responsive design for a great experience on any device
+5. 🔗 Easily share your notes with fellow users
