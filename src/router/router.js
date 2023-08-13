@@ -6,6 +6,8 @@ import {
 } from "vue-router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
+import Swal from "sweetalert2";
+
 // Create the router instance with the specified routes
 const router = createRouter({
   history: createWebHashHistory(),
@@ -14,8 +16,7 @@ const router = createRouter({
       path: "/",
       component: () => import("../views/Home.vue"),
       meta: { title: "Home" },
-    }
-    ,
+    },
     {
       path: "/register",
       component: () => import("../views/Register.vue"),
@@ -32,11 +33,20 @@ const router = createRouter({
     },
     ,
     {
-      path: "/testing",
-      name: "Testing",
-      component: () => import("../views/a.vue"),
+      path: "/FlagGame",
+      name: "FlagGame",
+      component: () => import("../views/FlagGame.vue"),
       meta: {
-        requireAuth: true, // Specify that this route requires authentication
+        requireAuth: true, 
+        title: "New Note",
+      },
+    },
+    {
+      path: "/Save-note",
+      name: "Save Note",
+      component: () => import("../views/saveNote.vue"),
+      meta: {
+        requireAuth: true,
         title: "New Note",
       },
     },
@@ -45,7 +55,7 @@ const router = createRouter({
       name: "My Notes",
       component: () => import("../views/userNotes.vue"),
       meta: {
-        requireAuth: true, // Specify that this route requires authentication
+        requireAuth: true,
         title: "My Notes",
       },
     },
@@ -103,7 +113,7 @@ router.beforeEach(async (to, from, next) => {
       next(); // Allow the navigation to proceed
     } else {
       alert("You don't have Access"); // Show an error message if the user is not authenticated
-      next("/sign-in"); // Redirect to the sign-in page
+      next("/register"); // Redirect to the sign-in page
     }
   } else {
     next(); // Allow the navigation to proceed

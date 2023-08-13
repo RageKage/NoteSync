@@ -17,9 +17,13 @@ html {
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 1rem;
-  font-family: "Roboto";
-  border-bottom: 1px solid #000000;
-  background: #f4f4f4;
+  /* font-family: "Roboto"; */
+  /* border-bottom: 1px solid #000000; */
+  /* background: #f4f4f4; */
+  background-color: #f0f2f5;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
 }
 
 .logo {

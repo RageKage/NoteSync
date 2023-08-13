@@ -106,34 +106,37 @@
                       <div class="note-date-container">
                         <p class="note-date">{{ note.date }}</p>
                       </div>
+
                       <div class="note-shared-status-container">
-                        
-                        <p
+                        <!-- Orange circle: This note has been shared with you -->
+                        <div
+                          class="circle orange-circle"
+                          v-if="
+                            sharedNotes[note.id] &&
+                            sharedNotes[note.id].sharedStatus ===
+                              'Shared with you by. . .'
+                          "
                           @mouseover="hover = note.id"
                           @mouseleave="hover = null"
-                          v-if="
-                            (hover === note.id &&
-                              sharedNotes[note.id] &&
-                              sharedNotes[note.id].sharerEmail) ||
-                            (sharedNotes[note.id] &&
-                              sharedNotes[note.id].sharedStatus)
-                          "
-                          class="note-shared-status"
                         >
-                          <span
-                            v-if="
-                              hover === note.id &&
-                              sharedNotes[note.id] &&
-                              sharedNotes[note.id].sharerEmail
-                            "
-                            class="note-shared-email"
-                          >
+                          <div class="tooltip">
                             {{ sharedNotes[note.id].sharerEmail }}
-                          </span>
-                          <span v-else class="note-shared-status-text">
-                            {{ sharedNotes[note.id].sharedStatus }}
-                          </span>
-                        </p>
+                          </div>
+                        </div>
+
+                        <!-- Red circle: You have shared this note -->
+                        <div
+                          class="circle red-circle"
+                          v-if="
+                            sharedNotes[note.id] &&
+                            sharedNotes[note.id].sharedStatus ===
+                              'Shared by you'
+                          "
+                          @mouseover="hover = note.id"
+                          @mouseleave="hover = null"
+                        >
+                          <div class="tooltip">You have shared this note</div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -153,9 +156,12 @@
                       class="edit-note-modal"
                     >
                       <!-- Close Modal button -->
-                      <div class="modal-overlay-share" @click="closeModal"></div>
+                      <div
+                        class="modal-overlay-share"
+                        @click="closeModal"
+                      ></div>
                       <!-- Edit Note Modal Content -->
-                      <div class="edit-note-modal-content" >
+                      <div class="edit-note-modal-content">
                         <h2 class="modal-title">EDITING NOTE</h2>
                         <label for="edit-note-title" class="label-title"
                           >Title:</label
@@ -199,7 +205,10 @@
                         class="share-modal"
                       >
                         <!-- Close Share Modal button -->
-                        <div class="modal-overlay-share" @click="closeShareModal"></div>
+                        <div
+                          class="modal-overlay-share"
+                          @click="closeShareModal"
+                        ></div>
                         <!-- Share Modal Content -->
                         <div class="share-modal-content">
                           <h2 class="modal-title">
@@ -261,7 +270,7 @@
 import { ref, onMounted, watchEffect } from "vue";
 import { getAuth, signOut } from "firebase/auth";
 import Swal from "sweetalert2";
-import '@/assets/dark.scss'
+import "@/assets/dark.scss";
 import {
   getDatabase,
   ref as dbRef,
@@ -317,8 +326,6 @@ watchEffect(async () => {
   const noteShares = await Promise.all(sharedNotesPromises);
 
   sharedNotes.value = Object.fromEntries(noteShares);
-
-
 });
 
 onMounted(() => {
@@ -339,13 +346,13 @@ body {
 
 @media screen and (max-width: 700px) {
   body {
-    font-size: 14px; /* Reduced font size for screens under 700px wide */
+    font-size: 14px;
   }
 }
 
 @media screen and (max-width: 300px) {
   body {
-    font-size: 12px; /* Further reduced font size for screens under 300px wide */
+    font-size: 12px;
   }
 }
 
@@ -353,6 +360,7 @@ h2,
 h3 {
   color: #000;
   margin-bottom: 20px;
+  text-align: left;
 }
 
 button {
@@ -518,17 +526,17 @@ textarea {
   }
 
   .search-result-item {
-  background-color: #ffffff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ddd;
-  border-radius: 15px;
-  padding: 10px;
-  transition: background-color 0.2s ease-in-out;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
+    background-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    padding: 10px;
+    transition: background-color 0.2s ease-in-out;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
 }
 
 @media only screen and (max-width: 700px) {
@@ -545,7 +553,7 @@ textarea {
   .label-content,
   .no-notes-title,
   .no-notes-message {
-    font-size: 0.87em; /* adjust this value to your needs */
+    font-size: 0.87em;
   }
 
   .search-input {
@@ -557,16 +565,27 @@ textarea {
   .delete-button,
   .save-note-button,
   .share-note-button {
-    font-size: 0.8em; /* adjust this value to your needs */
+    font-size: 0.8em;
   }
 
   .search-result-item {
     display: flex;
     flex-direction: column;
   }
+
+  .search-result-item {
+    background-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    padding: 10px;
+    /* transition: background-color 0.2s ease-in-out; */
+    /* display: flex; */
+    /* justify-content: space-between; */
+    /* align-items: center; */
+    margin-bottom: 10px;
+  }
 }
-
-
 
 .edit-button,
 .share-button,
@@ -582,11 +601,19 @@ textarea {
   max-height: 300px;
   overflow: auto;
   margin-bottom: 1rem;
+  /* overflow: visible; */
+}
+
+.note-title-date {
+  display: flex;
+  flex-wrap: nowrap;
+  align-content: flex-start;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 @media screen and (max-width: 700px) {
   .note-item {
-    border: 1px solid #333;
     box-sizing: border-box;
     background-color: #fff;
     border-radius: 10px;
@@ -595,6 +622,10 @@ textarea {
     margin-bottom: 20px;
     height: 100%;
     max-height: 400px;
+    background-color: #f0f2f5;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
   }
 }
 
@@ -606,17 +637,21 @@ textarea {
   }
 
   .note-item {
-    border: 1px solid #333;
+    /* border: 1px solid #333; */
     box-sizing: border-box;
-    background-color: #fff;
-    border-radius: 10px;
+    /* background-color: #fff; */
+    /* border-radius: 10px; */
     box-shadow: 0 4px 10px #0000001a;
-    padding: 1rem;
+    /* padding: 1rem; */
     width: calc(50% - 20px);
     height: 400px;
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
+    background-color: #f0f2f5;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
   }
 }
 
@@ -646,8 +681,6 @@ textarea {
   margin: 2em auto;
   margin-top: 20px;
 }
-
-
 
 .search-results-container {
   max-height: 400px;
@@ -719,7 +752,6 @@ input#edit-note-title {
   margin-top: 6rem;
 }
 
-
 .new-note-link {
   display: inline-block;
   margin-top: 20px;
@@ -733,22 +765,22 @@ input#edit-note-title {
   justify-content: space-between;
 }
 .notes-section {
-  margin-top:1rem ;
+  margin-top: 1rem;
   /* max-width: 1500px; */
   padding: 30px;
 }
-
 
 @media screen and (min-width: 700px) {
   .notes-section {
-  margin-top:5rem ;
-  /* max-width: 1500px; */
-  padding: 30px;
-}
+    margin-top: 5rem;
+    /* max-width: 1500px; */
+    padding: 30px;
+  }
 }
 
 .note-body {
   margin-top: 2rem;
+  text-align: left;
 }
 
 input#share-email {
@@ -833,23 +865,73 @@ input#share-email {
 }
 
 /* Shared Notif */
-p.note-shared-status {
-  text-transform: uppercase;
-    text-decoration: none;
-    letter-spacing: 0em;
-    display: inline-block;
-    padding: 5px;
-    font-size: 14px;
-    padding-left: rem;
-    background-color: #e1e0e0;
-    color: #666;
-    text-align: center;
-    border: 1px solid #333;
-    box-sizing: border-box;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px #0000001a;
-    margin-top: 1rem;
-    cursor: pointer;
+
+.note-date-sharedstatus {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.note-date-container {
+  margin-right: 1rem;
+}
+
+.note-date {
+  font-size: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.note-shared-status-container {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.orange-circle {
+  background-color: orange;
+}
+
+.red-circle {
+  background-color: red;
+}
+.tooltip {
+  display: none;
+  position: absolute;
+  padding: 0.5rem;
+  background-color: #333;
+  color: #fff;
+  border-radius: 4px;
+  z-index: 1000;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-100%);
+  white-space: nowrap;
+  margin-top: 5px;
+}
+
+.circle {
+  position: relative;
+}
+
+.circle:hover .tooltip {
+  display: block;
+}
+
+/* 
+ */
+
+h2.no-notes-title {
+  color: #000;
+  margin-bottom: 20px;
+  text-align: center;
+  padding: 20px;
+  margin-top: 6rem;
 }
 </style>

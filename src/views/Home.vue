@@ -18,13 +18,11 @@
       <div class="main-content">
         <!-- Left Section -->
         <div class="left-section">
-          <h2 class="section-title">Key Features</h2>
           <p class="section-description">
             Note-taking web app, designed for seamless and secure organization
             of your personal notes!
           </p>
           <ul class="features-list">
-            <li class="feature-item">🚀 Key features:</li>
             <li class="feature-item">
               ✍️ Create, read, update, and delete notes with ease
             </li>
@@ -48,14 +46,6 @@
             Hosting, ensuring smooth updates. As this is the beta testing phase,
             I'd love to hear your feedback on the app's functionality and any
             areas for improvement.
-          </p>
-
-          <p class="contact-info">
-            Created by Niman Ahmed. Contact me at
-            <a href="mailto:notesyncservice@gmail.com" class="contact-email"
-              >notesyncservice@gmail.com</a
-            >
-            with any questions or feedback!
           </p>
         </div>
 
@@ -81,6 +71,15 @@
             <router-link to="/new-note" class="write-link">
               Start Writing!
             </router-link>
+          </div>
+
+          <div class="signedin-section second" v-if="signedIn">
+            <p class="game-invite">
+              Can you guess the flag by the country name?
+              <router-link to="/FlagGame" class="game-link">
+                Play Now!
+              </router-link>
+            </p>
           </div>
         </div>
       </div>
@@ -110,60 +109,116 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* CSS Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.game-invite {
+  font-size: 16px;
+  margin: 10px 0;
+  color: #555;
 }
 
-/* Body */
-body {
-  font-family: "Roboto", sans-serif;
-  background: #2c3e50;
-  color: #ecf0f1;
+.game-link {
+  color: #0099cc;
+  text-decoration: none;
+  margin-left: 5px;
+  padding: 5px 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  margin-top: 20px;
+  transition: background-color 0.3s;
 }
 
-/* Content Container */
+.game-link:hover {
+  background-color: #e9e9e9;
+}
+
+.write-link {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.write-link:hover {
+  background-color: #45a047;
+}
+
+.main-container {
+  font-family: "Arial", sans-serif;
+  background-color: #f7f9fc;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
 .content-container {
-  width: 80%;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
   max-width: 1200px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 5rem;
+  padding-top: 5rem;
 }
 
-/* Header Section */
 .header-section {
   text-align: center;
-  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e6e8eb;
+}
+
+.logo-image {
+  width: 100px;
+  height: auto;
+  margin: 0 auto;
 }
 
 .main-title {
-  font-size: 2.5em;
+  color: #333;
+  margin-top: 20px;
   margin-bottom: 10px;
-  font-weight: bold;
 }
 
 .main-description {
-  font-size: 1.2em;
-  margin-bottom: 20px;
-  line-height: 1.5;
+  color: #777;
 }
 
-.section-title {
-  font-size: 1.5em;
-  margin-bottom: 10px;
-  font-weight: bold;
+.main-content {
+  display: flex;
+  justify-content: space-between;
+  padding: 30px 0;
+}
+
+.left-section {
+  flex: 1;
+  margin-right: 40px;
+}
+
+.right-section {
+  flex: 1;
 }
 
 .section-description,
-.additional-info,
-.contact-info {
+.additional-info {
+  color: #555;
   margin-bottom: 20px;
-  line-height: 1.5;
 }
 
-/* Features List */
 .features-list {
-  list-style: none;
   padding-left: 20px;
   margin-bottom: 20px;
 }
@@ -172,118 +227,90 @@ body {
   margin-bottom: 10px;
 }
 
-/* Contact Email */
+li.feature-item:hover {
+  color: #3498db;
+  cursor: pointer;
+}
+
+.contact-info {
+  margin-top: 30px;
+}
+
 .contact-email {
-  color: #666;
+  color: #0077cc;
   text-decoration: none;
   transition: color 0.3s;
 }
 
 .contact-email:hover {
-  color: #3498db;
+  color: #0055aa;
 }
 
-/* Sign Up and Signed In Sections */
 .signup-section,
 .signedin-section {
-  background-color: #f8f8f8;
+  background-color: #f0f2f5;
   padding: 20px;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-}
-
-.signup-section:hover,
-.signedin-section:hover {
-  background-color: #e9e9e9;
+  border-radius: 8px;
+  text-align: center;
 }
 
 .signup-prompt {
-  margin-bottom: 20px;
+  color: #555;
 }
 
 .signup-link,
 .write-link {
-  text-decoration: none;
-  padding: 10px 20px;
   display: inline-block;
-  transition: background-color 0.3s;
-  border-radius: 5px;
-  border: 1px solid #333;
+  background-color: #0077cc;
   color: #fff;
-  background-color: #333;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  margin-top: 20px;
+  transition: background-color 0.3s;
 }
 
 .signup-link:hover,
 .write-link:hover {
-  background-color: #fff;
-  color: #333;
+  background-color: #0055aa;
 }
 
-/* Main Content */
-.main-content {
-  display: flex;
-  justify-content: space-between;
+.signedin-section.second {
   margin-top: 20px;
-  margin-bottom: 5rem;
 }
 
-/* Media Queries */
-@media screen and (max-width: 700px) {
+/* responsive */
+@media (max-width: 768px) {
+  .content-container {
+    padding: 20px;
+    margin-top: 1rem;
+  }
+
   .main-content {
-    display: flex;
-    margin-top: 20px;
     flex-direction: column;
-    flex-wrap: wrap;
-    align-content: center;
-  }
-
-  .main-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 5rem;
   }
 
   .left-section,
   .right-section {
-    border: 1px solid #333;
-    box-sizing: border-box;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px #0000001a;
-    padding: 1rem;
-    margin-bottom: 1rem;
+    margin-right: 0;
+    margin-bottom: 20px;
   }
-  .logo-image {
-    max-width: 100px;
-    margin-bottom: 10px;
-    margin: 0 auto;
-  }
-}
 
-@media screen and (min-width: 700px) {
-  .left-section,
   .right-section {
-    border: 1px solid #333;
-    box-sizing: border-box;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px #0000001a;
-    padding: 1rem;
-    width: calc(50% - 20px);
+    order: -1;
   }
 
   .logo-image {
-    max-width: 100px;
-    margin-bottom: 10px;
-    margin: 0 auto;
-    margin-top: 5rem;
+    width: 80px;
   }
-}
 
-/* Main Container */
-.main-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 5rem;
+  .main-title {
+    font-size: 24px;
+  }
+
+  .signup-link,
+  .write-link {
+    padding: 8px 16px;
+  }
 }
 </style>

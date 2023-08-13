@@ -1,29 +1,12 @@
 <template>
-  <div
-    class="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8"
-  >
-    <div class="text-center">
-      <p class="text-base font-semibold text-indigo-600">404</p>
-
-      <h1
-        class="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl"
-      >
-        Page not Found
-      </h1>
-      <p class="mt-6 text-base leading-7 text-gray-600">
-        Sorry, we couldn’t find the page you’re looking for.
-      </p>
-      <div class="mt-10 flex items-center justify-center gap-x-6">
-        <button
-          @click="redirectToHome"
-          class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          Go Home
-        </button>
-      </div>
-    </div>
+  <div class="not-found">
+    <h1 class="error-code">404</h1>
+    <h2 class="error-message">Page Not Found</h2>
+    <p class="suggestion">Sorry, the page you are looking for does not exist.</p>
+    <router-link to="/" class="back-link"   @click="redirectToHome">Go Back Home</router-link>
   </div>
 </template>
+
 
 <script setup>
 import { useRoute, useRouter } from "vue-router";
@@ -36,3 +19,45 @@ const redirectToHome = () => {
   router.push("/");
 };
 </script>
+<style scoped>
+.not-found {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f3f3f3;
+}
+
+.error-code {
+  font-size: 6em;
+  color: #d63031;
+}
+
+.error-message {
+  font-size: 2em;
+  color: #2d3436;
+  margin-bottom: 20px;
+}
+
+.suggestion {
+  font-size: 1.2em;
+  color: #636e72;
+  margin-bottom: 30px;
+}
+
+.back-link {
+    font-size: 1.25rem;
+    color: #3B82F6;
+    text-decoration: none;
+    padding: 10px 20px;
+    border: 1px solid #3B82F6;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.back-link:hover {
+    background-color: #3B82F6;
+    color: #ffffff;
+}
+</style>

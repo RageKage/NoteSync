@@ -57,15 +57,26 @@
 
       <!-- Modal container -->
       <div v-if="showModal" class="modal-container">
-        <!-- Modal content container -->
         <div class="modal-content">
-          <h2>Guest Account Details</h2>
-          <p><strong>Username:</strong> {{ guestCredentials.email }}</p>
-          <p><strong>Password:</strong> {{ guestCredentials.password }}</p>
-          <p>Save these credentials to log back into your guest account.</p>
-
-          <!-- Modal close button -->
-          <button class="modal-close-button" @click="closeModal">Close</button>
+          <div class="header">
+            <h2>Guest Account Details</h2>
+          </div>
+          <div class="content">
+            <div class="credentials">
+              <label>Username:</label>
+              <span>{{ guestCredentials.email }}</span>
+            </div>
+            <div class="credentials">
+              <label>Password:</label>
+              <span>{{ guestCredentials.password }}</span>
+            </div>
+            <p class="info-note">
+              Save these credentials to log back into your guest account.
+            </p>
+            <button class="modal-close-button" @click="closeModal">
+              Close
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -147,8 +158,7 @@ import { ref, onMounted } from "vue";
 import router from "../router/router.js";
 import { useAuthUserStore } from "../stores/authUser.js";
 import Swal from "sweetalert2";
-import '@/assets/dark.scss'
-
+import "@/assets/dark.scss";
 
 // Pinia store instance
 const authUserStore = useAuthUserStore();
@@ -278,8 +288,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-
-
 * {
   margin: 0;
   padding: 0;
@@ -295,14 +303,16 @@ body {
 
 .main-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   padding: 20px;
-  min-height: 100vh;
+  min-height: 50rem;
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .error-message {
@@ -312,21 +322,18 @@ body {
 /* Signup form */
 .signup-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 2px 4px #0000001a;
+    background-color: #f0f2f5;
+    padding: 2rem;
+    border-radius: 8px;
+
 }
 
 .signup-form,
 .signin-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  padding: 50px;
-  border-radius: 5px;
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-  margin-bottom: 20px;
-  margin-top: 5rem;
+  margin-bottom: 2rem;
 }
 
 .signup-buttons-container,
@@ -351,7 +358,15 @@ body {
   cursor: pointer;
 }
 
-.signup-button, .guest-signin-button {
+.form-toggle-button:hover {
+  color: #3498db;
+    cursor: pointer;
+
+}
+
+
+.signup-button,
+.guest-signin-button {
   background-color: black;
   color: white;
   border: 1px solid black;
@@ -367,8 +382,12 @@ body {
 /* Signin form */
 .signin-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 2px 4px #0000001a;
+    background-color: #f0f2f5;
+    padding: 2rem;
+    border-radius: 8px;
 }
 
 .signin-button,
@@ -437,6 +456,64 @@ body {
 }
 
 .modal-content {
+  width: 400px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.credentials {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+label {
+  font-weight: 600;
+  color: #444;
+}
+
+span {
+  color: #666;
+}
+
+.info-note {
+  font-size: 0.9em;
+  color: #777;
+  margin-top: 10px;
+}
+
+.modal-close-button {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.2s;
+  cursor: pointer;
+}
+
+.modal-close-button:hover {
+  color: #888;
+  cursor: pointer;
+}
+
+.modal-content {
   background-color: white;
   padding: 20px;
   border-radius: 5px;
@@ -477,6 +554,4 @@ body {
     width: 100%;
   }
 }
-
 </style>
-

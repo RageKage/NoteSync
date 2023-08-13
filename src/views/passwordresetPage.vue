@@ -64,7 +64,7 @@ const showAlert = (message, icon) => {
 const passwordreset = async () => {
   const result = await authUserStore.resetPassword(email.value);
   if (result.success) {
-    router.push("/sign-in");
+    router.push("/register");
     return showAlert(`Password reset email sent!`, "success");
   } else {
     switch (
